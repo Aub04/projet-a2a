@@ -9,7 +9,7 @@ Cocher une case seulement quand l'étape fonctionne et que `uv run pytest` passe
 - [x] (brouillons rédigés par l'agent, à relire par chacun) Vérifier que les 5 profils `data/profiles/*.yaml` sont remplis (sinon, s'arrêter et demander)
 - [x] `git init`, `.gitignore` (`.venv`, `runs/`, cache LLM), premier commit avec le kit
 - [x] `pyproject.toml` avec uv, dépendances épinglées : a2a-sdk, ollama, pydantic, pyyaml, pytest, pandas, matplotlib, streamlit
-- [ ] **À FAIRE sur le PC de calcul** Vérifier qu'Ollama répond et que le modèle de `config.yaml` est installé ; noter le modèle retenu dans `docs/DECISIONS.md`
+- [x] Vérifier qu'Ollama répond et que le modèle de `config.yaml` est installé ; noter le modèle retenu dans `docs/DECISIONS.md`
 - [x] Lire la documentation et les exemples de la version installée de `a2a-sdk` ; résumer en 10 lignes dans `docs/DECISIONS.md` l'API utilisée (serveur, carte d'agent, envoi de message, DataPart)
 - [x] Preuve de concept : deux serveurs A2A locaux qui s'échangent un DataPart JSON, l'un répond grâce à un appel au LLM
 

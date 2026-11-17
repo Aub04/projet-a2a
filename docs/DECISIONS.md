@@ -118,3 +118,11 @@ Ces choix s'appliquent de la même façon aux deux architectures, sauf mention c
   écrire le rapport, seulement 3 créneaux de réunion communs pour 2 réunions.
 - Scénario obtenu : 76 h de tâches pour 140 h disponibles (ratio 0,54, « confortable ») ; baseline, p2p et
   orchestrateur (faux LLM) trouvent un planning complet et valide.
+
+## 2026-11-17 : modèle retenu et temps de réponse
+
+- Modèle : `qwen3:8b` via Ollama 0.40.16 (ID `500a1f067a9f`, 5,2 Go), `think: false`, température 0,2, graine 42,
+  contexte 8192. Inchangé par rapport à `config.yaml`.
+- Mesure sur le PC d'Aubin (i7-1260P, 16 Go, sans GPU) : décision de candidature d'un agent membre, 547 tokens en
+  entrée et 70 en sortie, 59,6 s au premier appel (chargement du modèle) puis 10,9 s.
+- Un modèle 27B a été essayé puis abandonné : 16,8 Go, il ne tient pas dans la mémoire de cette machine.
