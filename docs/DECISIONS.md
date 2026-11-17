@@ -54,3 +54,52 @@ La baseline ne trouve donc jamais de solution complète sur les scénarios tendu
 « plus grande capacité restante » consomme la capacité de membres dont la compétence est rare. C'est un résultat à
 garder dans le rapport (la baseline est un plancher, pas une référence optimale). Détail par scénario :
 `uv run python -m a2a_team.scenarios.generator --check`.
+
+## 2026-11-17 : API de a2a-sdk 1.3.0 utilisée (lue dans le code installé)
+
+- Version épinglée : `a2a-sdk[http-server]==1.3.0` (spec A2A 1.0, types protobuf).
+- Serveur : une classe dérivée de `a2a.server.agent_execution.AgentExecutor` (méthodes `execute(context, event_queue)`
+  et `cancel`) ; le message reçu est `context.message`, la réponse est publiée par `event_queue.enqueue_event(message)`.
+- `DefaultRequestHandler(agent_executor, task_store=InMemoryTaskStore(), agent_card)` (alias de `DefaultRequestHandlerV2`).
+- Routes Starlette : `create_agent_card_routes(card)` (carte sur `/.well-known/agent-card.json`) et
+  `create_jsonrpc_routes(handler, rpc_url="/")`, servies par uvicorn.
+- Carte : `AgentCard(name, description, version, supported_interfaces=[AgentInterface(url, protocol_binding="JSONRPC",
+  protocol_version="1.0")], capabilities, default_input_modes, default_output_modes, skills=[AgentSkill(...)])`.
+- Client : `await create_client(url, client_config=ClientConfig(streaming=False, httpx_client=...))` résout la carte ;
+  `client.send_message(SendMessageRequest(message=...))` est un itérateur asynchrone de `StreamResponse`
+  (champ `message` quand l'agent répond par un message direct).
+- DataPart : `a2a.helpers.proto_helpers.new_data_message(dict, role=Role.ROLE_USER)` et `get_data_parts(parts)`.
+  Les nombres passent par `google.protobuf.Value` et reviennent en flottants : on rétablit les entiers à la réception.
+- Preuve de concept validée : serveurs locaux qui échangent des DataPart JSON, réponses produites par un appel LLM
+  (faux LLM en attendant Ollama) ; voir `run_demo --fake-llm`.
+
+## 2026-11-17 : choix de mise en œuvre des protocoles
+
+Ces choix s'appliquent de la même façon aux deux architectures, sauf mention contraire.
+
+1. **Imprévus après la négociation initiale.** La négociation se fait d'abord sur le scénario sans imprévus, puis les
+   imprévus sont injectés un par un dans l'ordre de `trigger_round`, et l'architecture répare. Raison : un « tour » n'a
+   pas le même sens dans les deux architectures (une tâche annoncée contre une révision de planning) ; injecter au même
+   moment logique rend la mesure « valide après imprévu » et « messages pour s'en remettre » comparable.
+   L'imprévu est envoyé par le système à l'agent concerné (le membre absent, le détenteur de la tâche, sinon un agent
+   pris à tour de rôle). En p2p il libère et ré-annonce ; en orchestrateur il prévient l'orchestrateur, qui replanifie.
+2. **Message ajouté en p2p : `AWARD_NOTICE`** (annonceur vers tous, après confirmation). C'est le « reject-proposal »
+   du Contract Net classique, et il sert aussi à connaître la semaine des dépendances sans vue globale. Il est compté
+   dans le coût du p2p.
+3. **Messages ajoutés en orchestrateur : `START`, `PLAN_FINAL`.** `START` vient du système (non compté). `PLAN_FINAL`
+   informe un membre de sa partie définitive quand des éléments contestés ont été retirés (compté).
+4. **Messages du système non comptés** : `ANNOUNCE` (c'est le tour de tel agent d'annoncer telle tâche), `START_POLL`,
+   `START`, `EVENT` du système vers l'agent concerné. Ils jouent le rôle d'horloge de la simulation. Les `ACK` et les
+   `ESCALATION` (écrites au journal) ne sont pas comptés non plus.
+5. **Pas d'appel LLM quand il n'y a pas de choix** : refus sans option faisable (prévu par la spec), attribution
+   directe quand l'annonceur n'a reçu qu'une proposition, vote vide sans créneau compatible, objections dures
+   d'une proposition de planning (envoyées par le code sans demander au LLM).
+6. **Relances p2p** : une tâche sans proposition est ré-annoncée aux mêmes semaines (jamais après l'échéance, ce serait
+   une violation) avec la mention de relance, jusqu'à `max_rounds`. Si tous les refus sont « durs » (aucune option
+   faisable pour personne), on escalade tout de suite.
+7. **Orchestrateur** : après une révision, seuls les membres dont la partie a changé (ou qui ont objecté) sont
+   reconsultés. Après `max_rounds` révisions, les éléments encore contestés sont retirés du planning et escaladés.
+8. **Erreur LLM persistante** (JSON invalide après 2 relances) : repli par le code (refus, ou acceptation si aucune
+   objection dure), journalisé dans `llm_calls.jsonl` avec `fallback: true`.
+9. **Transport** : HTTP A2A réel par défaut. Le transport mémoire (mêmes objets Message A2A) sert aux tests et reste
+   disponible avec `--transport memory`.

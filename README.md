@@ -1,43 +1,87 @@
-# Kit de lancement : projet métier A2A
+# Projet métier IR5 : pair-à-pair ou orchestrateur ? (A2A)
 
-Ce dossier contient tout ce qu'il faut pour qu'un agent Claude Code réalise le projet. Il deviendra ensuite le dépôt Git
-du projet (l'agent remplacera ce README par la vraie documentation).
+Deux organisations d'un même système multi-agents basé sur le protocole A2A, comparées sur la répartition des tâches
+et des réunions d'un groupe de projet :
 
-## Contenu
+- **p2p** : les agents négocient entre eux (Contract Net : annonce, propositions, attribution, confirmation) ;
+- **orchestrator** : un agent coordinateur collecte les profils, propose un planning, les agents acceptent ou objectent ;
+- **baseline** : algorithme glouton sans IA, point de comparaison.
 
-| Fichier | Rôle |
-| --- | --- |
-| `CLAUDE.md` | Instructions permanentes de l'agent (lu automatiquement par Claude Code) |
-| `PROMPT.md` | Le message à coller pour lancer l'agent, et celui pour reprendre plus tard |
-| `docs/spec_prof.md` | La spec de 2 pages rendue à la prof |
-| `docs/SPEC.md` | La spec technique détaillée pour l'agent |
-| `docs/PLAN.md` | Les étapes, cochées par l'agent au fur et à mesure |
-| `docs/DECISIONS.md` | Le journal des décisions tenu par l'agent |
-| `data/profiles/m1.yaml` à `m5.yaml` | Vos profils, **à remplir par chacun** |
-| `data/project_tasks.yaml` | Les tâches de notre projet (à ajuster si besoin) |
+Chaque membre est représenté par un agent LLM (même classe `MemberAgent`, mêmes prompts dans les deux architectures).
+Toutes les contraintes dures sont vérifiées par le code ; le LLM choisit parmi des options faisables ou refuse.
 
-## Avant de lancer (30 minutes)
+Documents : `docs/spec_prof.md` (engagement), `docs/SPEC.md` (spec technique), `docs/PLAN.md` (avancement),
+`docs/DECISIONS.md` (journal des décisions et écarts à la spec).
 
-1. **Chacun remplit son profil** dans `data/profiles/` (un fichier par personne, `A_REMPLIR: false` à la fin).
-2. Relire `data/project_tasks.yaml` et ajuster durées et échéances.
-3. Sur la machine qui fera tourner le projet, installer : Python 3.11+, `uv`, Git, et Ollama.
-   Puis télécharger le modèle : `ollama pull qwen3:8b` (ou un autre modèle de 7-9 milliards de paramètres ;
-   l'agent l'indiquera dans `config.yaml`). Il faut idéalement une carte graphique avec 8 Go de mémoire.
-   Sans GPU, prévoir l'option API gratuite prévue dans la spec.
+## Installation (sur n'importe quel PC Windows, Linux ou macOS)
 
-## Lancer l'agent
+Prérequis : Git, [uv](https://docs.astral.sh/uv/) et [Ollama](https://ollama.com). Python 3.11 est installé par uv.
 
-Ouvrir Claude Code dans ce dossier, puis coller le premier message de `PROMPT.md`.
-Laisser l'agent avancer ; il s'arrête de lui-même s'il a besoin de vous (profils manquants, modèle absent,
-calcul trop long, choix qui touche à l'équité de la comparaison).
+```bash
+git clone <url-du-depot> projet-a2a
+cd projet-a2a
+uv sync                       # crée .venv avec les versions épinglées
+uv run pytest                 # 40 tests, sans LLM (faux LLM scripté)
+ollama pull qwen3:8b          # environ 5 Go ; il faut idéalement un GPU avec 8 Go de mémoire
+```
 
-## Ce que vous devez vérifier vous-mêmes
+Le modèle utilisé est défini dans `config.yaml` (`llm.model`). Si un autre modèle est installé, changer cette ligne
+et le noter dans `docs/DECISIONS.md`. Les deux architectures utilisent toujours le même modèle et les mêmes réglages.
 
-- **Vendredi 20 novembre** : lancer les deux architectures sur `notre_groupe` avec la commande donnée par l'agent,
-  et lire une trace de négociation. Si ça ne tourne pas, c'est la priorité absolue avant de rentrer en entreprise.
-- **Les résultats** : relire `results/` et `docs/DECISIONS.md`, vérifier que les chiffres ont du sens.
-- **La notation à l'aveugle** : chacun note les plannings A et B dans le CSV fourni, sans regarder lequel est lequel.
-- **Le rapport** : `rapport/brouillon.md` est un brouillon factuel. Il faut le réécrire avec vos mots et compléter
-  les passages `[À COMPLÉTER PAR LE GROUPE]`.
-- **La soutenance** : chacun doit pouvoir expliquer sa partie du code et les choix faits. Répartissez-vous les
-  modules (voir la section 6 de la spec) et lisez-les avant le 7 décembre.
+Sans GPU, un endpoint compatible OpenAI peut remplacer Ollama : `provider: openai_compat`, renseigner `base_url`,
+et mettre la clé dans la variable d'environnement `LLM_API_KEY` (jamais dans un fichier versionné).
+
+## Commandes
+
+```bash
+# Vérification rapide sans LLM (faux LLM, quelques secondes)
+uv run python -m a2a_team.run_demo --arch p2p --scenario dev_1001 --fake-llm
+uv run python -m a2a_team.run_demo --arch orchestrator --scenario dev_1001 --fake-llm
+
+# Démo réelle avec Ollama sur notre groupe (les profils data/profiles/ doivent être remplis)
+uv run python -m a2a_team.scenarios.from_profiles          # écrit data/scenarios/demo/notre_groupe.json
+uv run python -m a2a_team.run_demo --arch p2p --scenario notre_groupe
+uv run python -m a2a_team.run_demo --arch orchestrator --scenario notre_groupe
+uv run python -m a2a_team.run_demo --arch baseline --scenario notre_groupe
+
+# Contrôle des scénarios générés (solubilité, baseline)
+uv run python -m a2a_team.scenarios.generator --check
+```
+
+Options de `run_demo` : `--transport memory` (sans serveurs HTTP, mêmes objets messages A2A), `--no-events`
+(ignore les imprévus), `--allow-templates` (essai technique sur des profils non remplis).
+
+Pendant l'exécution, chaque message A2A s'affiche (émetteur, destinataire, type). Les serveurs A2A écoutent sur
+`127.0.0.1` : 9100 pour l'orchestrateur, 9101 et suivants pour les membres. Chaque agent publie sa carte sur
+`/.well-known/agent-card.json`.
+
+## Résultats
+
+Chaque exécution écrit dans `runs/<date>_<arch>_<scenario>/` :
+
+- `trace.jsonl` : tous les messages A2A (horodatage, émetteur, destinataire, type, contenu, phase) ;
+- `llm_calls.jsonl` : tous les appels au LLM (agent, décision, prompts, réponse brute, tokens, durée) ;
+- `result.json` : planning initial et final, rapport du validateur, coût, réaction aux imprévus.
+
+`runs/` n'est pas versionné.
+
+## Organisation du code
+
+```
+src/a2a_team/
+  models.py           modèle de données (pydantic)
+  validator.py        contraintes dures et scores
+  baseline.py         glouton sans IA
+  llm.py              Ollama, endpoint OpenAI, FakeLLM, cache, journal
+  prompts/            prompts (fichiers texte)
+  agents/member.py    agent membre (commun) + rôles pair-à-pair
+  agents/orchestrator.py
+  a2a_layer/          serveur A2A, transports HTTP et mémoire, lanceur, trace
+  architectures/runner.py   déroulé commun, imprévus, mesures
+  scenarios/          générateur (dev 20, test 50 figés) et scénario notre_groupe
+  run_demo.py         commande unique
+data/
+  profiles/           profils des 5 membres (à remplir)
+  project_tasks.yaml  tâches réelles du projet
+  scenarios/          dev/, test/ (figé, hash dans DECISIONS.md), demo/
+```
