@@ -1,0 +1,24 @@
+# Les vraies tâches de notre projet, utilisées pour le scénario de démo « notre_groupe ».
+# Ajustez les durées et échéances si besoin. Semaines : S47 = 16-20 nov (école), S48 = 23-29 nov (entreprise),
+# S49 = 30 nov - 6 déc (entreprise). Soutenance le lundi 7 décembre.
+# Compétences possibles : dev_python, ia_llm, front_demo, redaction, presentation, test_eval, devops
+
+weeks: [S47, S48, S49]
+meetings_needed: 2
+
+tasks:
+  - {id: T01, title: "Socle A2A : serveurs, cartes d'agent, format des messages", skill: dev_python, min_level: 3, hours: 8, deadline: S47, depends_on: []}
+  - {id: T02, title: "Profils des membres et scénario de démo", skill: redaction, min_level: 1, hours: 2, deadline: S47, depends_on: []}
+  - {id: T03, title: "Validateur de planning et algorithme de référence", skill: dev_python, min_level: 3, hours: 6, deadline: S47, depends_on: []}
+  - {id: T04, title: "Générateur de scénarios de test", skill: dev_python, min_level: 2, hours: 5, deadline: S47, depends_on: [T03]}
+  - {id: T05, title: "Agent membre et prompts", skill: ia_llm, min_level: 3, hours: 6, deadline: S47, depends_on: [T01]}
+  - {id: T06, title: "Architecture pair-à-pair", skill: ia_llm, min_level: 3, hours: 8, deadline: S47, depends_on: [T05]}
+  - {id: T07, title: "Architecture avec orchestrateur", skill: ia_llm, min_level: 3, hours: 8, deadline: S47, depends_on: [T05]}
+  - {id: T08, title: "Gestion des imprévus", skill: dev_python, min_level: 3, hours: 4, deadline: S48, depends_on: [T06, T07]}
+  - {id: T09, title: "Campagne de mesures et figures", skill: test_eval, min_level: 2, hours: 6, deadline: S48, depends_on: [T04, T08]}
+  - {id: T10, title: "Interface de démonstration", skill: front_demo, min_level: 2, hours: 6, deadline: S48, depends_on: [T06, T07]}
+  - {id: T11, title: "Notation à l'aveugle des plannings", skill: test_eval, min_level: 1, hours: 1, deadline: S48, depends_on: [T06, T07]}
+  - {id: T12, title: "Rédaction du rapport : contexte et architectures", skill: redaction, min_level: 2, hours: 5, deadline: S49, depends_on: []}
+  - {id: T13, title: "Rédaction du rapport : résultats et analyse", skill: redaction, min_level: 3, hours: 5, deadline: S49, depends_on: [T09]}
+  - {id: T14, title: "Support de soutenance", skill: presentation, min_level: 2, hours: 4, deadline: S49, depends_on: [T09]}
+  - {id: T15, title: "Répétition de la soutenance et vidéo de secours", skill: presentation, min_level: 1, hours: 2, deadline: S49, depends_on: [T10, T14]}

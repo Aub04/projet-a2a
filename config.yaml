@@ -1,0 +1,14 @@
+llm:
+  provider: ollama            # ollama | openai_compat
+  model: "qwen3:8b"           # à adapter au modèle réellement installé
+  temperature: 0.2
+  seed: 42
+  max_retries: 2
+  openai_compat:              # utilisé seulement si provider = openai_compat
+    base_url: ""
+    api_key_env: "LLM_API_KEY"
+limits:
+  max_rounds: 6
+  max_llm_calls_per_scenario: 400
+eval:
+  runs_per_scenario: 3

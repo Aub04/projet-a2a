@@ -1,0 +1,45 @@
+# Profil d'un membre du groupe : à remplir par la personne elle-même (5 minutes).
+# Ce profil est lu par l'agent qui vous représente. Soyez honnêtes, c'est ce qui rend la démo crédible.
+# Quand c'est rempli, passez A_REMPLIR à false.
+
+A_REMPLIR: true
+
+id: m1                 # ne pas modifier (m1 à m5)
+name: "Prénom"
+
+# Niveau de 1 (débutant) à 5 (très à l'aise)
+skills:
+  dev_python: 3
+  ia_llm: 3
+  front_demo: 2
+  redaction: 3
+  presentation: 3
+  test_eval: 2
+  devops: 2
+
+# Heures que vous pouvez réellement donner au projet chaque semaine.
+# S47 = 16-20 nov (école), S48 = 23-29 nov (entreprise), S49 = 30 nov - 6 déc (entreprise)
+capacity_hours:
+  S47: 20
+  S48: 6
+  S49: 6
+
+max_tasks_per_week: 3          # mettre null si pas de limite
+
+# Ce que vous aimez faire / préférez éviter (mêmes noms que dans skills)
+preferences: [dev_python]
+dislikes: [presentation]
+
+# Vos limites, en une phrase chacune (l'agent les défendra)
+hard_limits:
+  - "Pas plus de 6 heures de projet par semaine quand je suis en entreprise"
+
+# Créneaux d'une heure où vous pouvez faire une réunion. Format : semaine-jour-heure
+# jours : lun, mar, mer, jeu, ven, sam, dim ; heure de début sur 24 h
+meeting_slots:
+  - S47-mar-14
+  - S47-jeu-10
+  - S48-mer-20
+  - S48-sam-10
+  - S49-mar-20
+  - S49-dim-18
