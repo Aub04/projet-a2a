@@ -1,2 +1,1 @@
-def hello() -> str:
-    return "Hello from a2a-team!"
+"""Comparaison pair-à-pair / orchestrateur pour un système multi-agents A2A."""

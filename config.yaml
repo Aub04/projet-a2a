@@ -1,12 +1,16 @@
 llm:
   provider: ollama            # ollama | openai_compat
-  model: "qwen3:8b"           # à adapter au modèle réellement installé
+  model: "qwen3:8b"           # à adapter au modèle réellement installé (ollama list)
   temperature: 0.2
   seed: 42
   max_retries: 2
+  host: null                  # null = http://localhost:11434
+  think: false                # qwen3 : désactive le mode « réflexion » (réponses plus courtes et plus rapides)
+  num_ctx: 8192
   openai_compat:              # utilisé seulement si provider = openai_compat
     base_url: ""
     api_key_env: "LLM_API_KEY"
+    response_format: json_schema   # json_object si le fournisseur ne gère pas les schémas
 limits:
   max_rounds: 6
   max_llm_calls_per_scenario: 400
