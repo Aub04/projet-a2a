@@ -6,7 +6,7 @@ Cocher une case seulement quand l'étape fonctionne et que `uv run pytest` passe
 
 ## Phase 0. Mise en place
 
-- [ ] **BLOQUÉ (profils non remplis)** Vérifier que les 5 profils `data/profiles/*.yaml` sont remplis (sinon, s'arrêter et demander)
+- [x] (brouillons rédigés par l'agent, à relire par chacun) Vérifier que les 5 profils `data/profiles/*.yaml` sont remplis (sinon, s'arrêter et demander)
 - [x] `git init`, `.gitignore` (`.venv`, `runs/`, cache LLM), premier commit avec le kit
 - [x] `pyproject.toml` avec uv, dépendances épinglées : a2a-sdk, ollama, pydantic, pyyaml, pytest, pandas, matplotlib, streamlit
 - [ ] **À FAIRE sur le PC de calcul** Vérifier qu'Ollama répond et que le modèle de `config.yaml` est installé ; noter le modèle retenu dans `docs/DECISIONS.md`

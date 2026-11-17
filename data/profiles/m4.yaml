@@ -1,45 +1,40 @@
-# Profil d'un membre du groupe : à remplir par la personne elle-même (5 minutes).
-# Ce profil est lu par l'agent qui vous représente. Soyez honnêtes, c'est ce qui rend la démo crédible.
-# Quand c'est rempli, passez A_REMPLIR à false.
+# Profil proposé comme brouillon par l'agent à la demande d'Aubin (17/11/2026).
+# Chacun relit le sien et corrige ce qui est faux : c'est ce profil que son agent défendra.
+# S47 = 16-20 nov (école), S48 = 23-29 nov (entreprise), S49 = 30 nov - 6 déc (entreprise)
 
-A_REMPLIR: true
+A_REMPLIR: false
 
-id: m4                 # ne pas modifier (m1 à m5)
-name: "Prénom"
+id: m4
+name: "Thomas"
 
-# Niveau de 1 (débutant) à 5 (très à l'aise)
 skills:
   dev_python: 3
-  ia_llm: 3
-  front_demo: 2
-  redaction: 3
+  ia_llm: 2
+  front_demo: 5
+  redaction: 2
   presentation: 3
   test_eval: 2
-  devops: 2
+  devops: 4
 
-# Heures que vous pouvez réellement donner au projet chaque semaine.
-# S47 = 16-20 nov (école), S48 = 23-29 nov (entreprise), S49 = 30 nov - 6 déc (entreprise)
 capacity_hours:
-  S47: 20
+  S47: 15
   S48: 6
   S49: 6
 
-max_tasks_per_week: 3          # mettre null si pas de limite
+max_tasks_per_week: 2
 
-# Ce que vous aimez faire / préférez éviter (mêmes noms que dans skills)
-preferences: [dev_python]
-dislikes: [presentation]
+preferences: [front_demo, devops]
+dislikes: [redaction]
 
-# Vos limites, en une phrase chacune (l'agent les défendra)
 hard_limits:
-  - "Pas plus de 6 heures de projet par semaine quand je suis en entreprise"
+  - "Deux tâches par semaine au maximum, sinon je m'éparpille"
+  - "Le week-end seulement le samedi matin"
 
-# Créneaux d'une heure où vous pouvez faire une réunion. Format : semaine-jour-heure
-# jours : lun, mar, mer, jeu, ven, sam, dim ; heure de début sur 24 h
 meeting_slots:
   - S47-mar-14
   - S47-jeu-10
-  - S48-mer-20
+  - S48-lun-20
   - S48-sam-10
   - S49-mar-20
+  - S49-sam-10
   - S49-dim-18

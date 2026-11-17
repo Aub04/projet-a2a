@@ -219,15 +219,19 @@ def _fake_greedy(o: OrchestratorAgent) -> dict:
     """Réponse du FakeLLM pour l'orchestrateur : glouton simple sur les informations reçues (tests seulement)."""
     from collections import defaultdict
     used = defaultdict(float)
+    count = defaultdict(int)
     out, week_of = [], {}
     for t in o.tasks.values():
         lo = max([o.weeks.index(week_of[d]) for d in t.depends_on if d in week_of], default=0)
         done = False
         for w in o.weeks[lo:o.weeks.index(t.deadline) + 1]:
             for mid, i in o.infos.items():
+                mx = i["max_tasks_per_week"]
                 if i["skills"].get(t.skill, 0) >= t.min_level and \
-                        i["capacity_hours"].get(w, 0) - used[(mid, w)] >= t.hours:
+                        i["capacity_hours"].get(w, 0) - used[(mid, w)] >= t.hours and \
+                        (mx is None or count[(mid, w)] < mx):
                     used[(mid, w)] += t.hours
+                    count[(mid, w)] += 1
                     out.append({"task_id": t.id, "member_id": mid, "week": w})
                     week_of[t.id] = w
                     done = True

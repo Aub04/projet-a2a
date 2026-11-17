@@ -103,3 +103,18 @@ Ces choix s'appliquent de la même façon aux deux architectures, sauf mention c
    objection dure), journalisé dans `llm_calls.jsonl` avec `fallback: true`.
 9. **Transport** : HTTP A2A réel par défaut. Le transport mémoire (mêmes objets Message A2A) sert aux tests et reste
    disponible avec `--transport memory`.
+
+## 2026-11-17 : profils du groupe rédigés par l'agent (écart à la spec prof)
+
+- Décision : à la demande d'Aubin, les cinq profils (Aubin, Gaël, Mahdi, Thomas, Mohammed) ont été rédigés par
+  l'agent comme brouillon plausible, au lieu d'être remplis par chacun. Celui d'Aubin s'appuie sur son parcours réel
+  (majeure IA, alternance, freelance web) ; les quatre autres sont inventés.
+- Écart : `docs/spec_prof.md` indique que chacun remplit lui-même son profil. **À signaler à la prof si les profils ne
+  sont pas relus.**
+- Impact : aucun sur l'équité entre architectures (même scénario pour les deux). En revanche, la notation à l'aveugle
+  de la satisfaction n'a de sens que si chacun a relu et corrigé son profil avant les exécutions réelles.
+- Caractéristiques choisies pour rendre la négociation intéressante : deux membres très demandeurs d'`ia_llm`
+  (Aubin, Mahdi), une semaine S49 presque vide pour Mahdi (3 h), Thomas limité à 2 tâches par semaine, Gaël qui veut
+  écrire le rapport, seulement 3 créneaux de réunion communs pour 2 réunions.
+- Scénario obtenu : 76 h de tâches pour 140 h disponibles (ratio 0,54, « confortable ») ; baseline, p2p et
+  orchestrateur (faux LLM) trouvent un planning complet et valide.
