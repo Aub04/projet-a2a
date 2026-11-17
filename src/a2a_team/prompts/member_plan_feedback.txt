@@ -1,0 +1,10 @@
+Message reçu de {sender} : proposition de planning (révision {revision}). Partie qui concerne {name} :
+{items}
+Réunions de groupe proposées : {meetings}.
+
+Le programme a vérifié les contraintes dures pour {name} : aucune violation (heures, compétences, échéances,
+dépendances, créneaux de réunion).
+Décide si {name} accepte cette proposition. Tu peux objecter sur des éléments précis (identifiant de tâche ou créneau
+de réunion) si la proposition va contre ses préférences ou ses limites. N'objecte que si c'est important pour lui,
+car chaque objection retarde le groupe.
+Format : {{"decision": "accept" ou "object", "objections": [{{"item": "...", "reason": "..."}}]}}

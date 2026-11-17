@@ -1,0 +1,7 @@
+Message reçu de {sender} : sondage pour la réunion de groupe n°{index} (une heure, tout le monde).
+Créneaux proposés : {slots}.
+Créneaux compatibles avec l'agenda de {name} (vérifié par le programme) : {options}.
+
+Indique les créneaux que {name} accepte parmi les créneaux compatibles. Accepter plusieurs créneaux aide le groupe
+à trouver une date commune.
+Format : {{"accepted": [liste de créneaux], "comment": "..."}}

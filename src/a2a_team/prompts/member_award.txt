@@ -1,0 +1,5 @@
+Message reçu de {sender} : la tâche {task_id} (« {title} », {skill}, {hours} h) est attribuée à {name} pour la
+semaine {week}, suite à sa proposition. Le programme a vérifié que c'est toujours compatible avec ses limites.
+
+Confirme l'attribution, ou décline si elle ne convient plus à {name}.
+Format : {{"decision": "confirm" ou "decline", "reason": "..."}}

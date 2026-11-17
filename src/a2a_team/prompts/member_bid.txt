@@ -1,0 +1,8 @@
+Message reçu de {sender} : appel à candidatures (CFP) pour une tâche.
+Tâche {task_id} : « {title} ». Compétence {skill} (niveau minimal {min_level}), {hours} h, échéance {deadline}.
+{relance}
+Semaines où {name} peut prendre cette tâche sans dépasser ses limites (vérifié par le programme) : {options}.
+
+Décide si tu proposes {name} pour cette tâche et pour quelle semaine. Tu peux refuser si elle ne lui convient pas
+(compétence qu'il préfère éviter, semaine déjà chargée), mais quelqu'un doit la faire.
+Format : {{"decision": "propose" ou "refuse", "week": une des semaines possibles ou null, "justification": "..."}}

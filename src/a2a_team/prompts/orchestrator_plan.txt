@@ -1,0 +1,11 @@
+Membres (résumés envoyés par leurs agents) :
+{members}
+
+Tâches à répartir :
+{tasks}
+
+Nombre de réunions d'une heure à placer avec tout le groupe : {meetings_needed}.
+{context}
+Produis le planning complet.
+Format : {{"assignments": [{{"task_id": "...", "member_id": "...", "week": "..."}}], "meetings": ["S47-mar-14", ...],
+"unassigned": ["..."], "comment": "..."}}

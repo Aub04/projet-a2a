@@ -1,0 +1,7 @@
+Tu as annoncé la tâche {task_id} (« {title} », {skill} niveau {min_level}, {hours} h, échéance {deadline}) et tu
+dois maintenant l'attribuer. Propositions reçues (tu ne connais des autres membres que ce qu'ils ont écrit) :
+{proposals}
+
+Choisis à qui attribuer la tâche. Pense à l'équilibre de la charge dans le groupe, aux préférences exprimées dans
+les justifications, et aux semaines les plus tôt quand d'autres tâches en dépendent.
+Format : {{"winner": identifiant du membre choisi, "reason": "..."}}
