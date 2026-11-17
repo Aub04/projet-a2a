@@ -1,0 +1,387 @@
+{
+  "id": "dev_1010",
+  "split": "dev",
+  "seed": 1010,
+  "weeks": [
+    "S47",
+    "S48",
+    "S49"
+  ],
+  "members": [
+    {
+      "id": "m1",
+      "name": "Karim",
+      "skills": {
+        "dev_python": 4,
+        "ia_llm": 1,
+        "front_demo": 4,
+        "redaction": 3,
+        "presentation": 3,
+        "test_eval": 2,
+        "devops": 3
+      },
+      "capacity_hours": {
+        "S47": 15.0,
+        "S48": 6.0,
+        "S49": 6.0
+      },
+      "max_tasks_per_week": null,
+      "preferences": [
+        "dev_python",
+        "front_demo"
+      ],
+      "dislikes": [
+        "ia_llm"
+      ],
+      "hard_limits": [
+        "Pas plus de 6 heures de projet en S48",
+        "Pas plus de 6 heures de projet en S49"
+      ],
+      "meeting_slots": [
+        "S47-lun-14",
+        "S47-lun-18",
+        "S47-mer-14",
+        "S47-mer-18",
+        "S47-ven-10",
+        "S47-ven-14",
+        "S48-dim-18",
+        "S48-dim-20",
+        "S48-lun-10",
+        "S48-mar-18",
+        "S48-mer-10",
+        "S48-mer-14",
+        "S48-sam-10",
+        "S49-dim-20",
+        "S49-jeu-20",
+        "S49-lun-10",
+        "S49-mar-14"
+      ]
+    },
+    {
+      "id": "m2",
+      "name": "Alice",
+      "skills": {
+        "dev_python": 3,
+        "ia_llm": 4,
+        "front_demo": 1,
+        "redaction": 2,
+        "presentation": 5,
+        "test_eval": 2,
+        "devops": 1
+      },
+      "capacity_hours": {
+        "S47": 8.0,
+        "S48": 23.0,
+        "S49": 23.0
+      },
+      "max_tasks_per_week": null,
+      "preferences": [
+        "ia_llm",
+        "presentation"
+      ],
+      "dislikes": [
+        "front_demo"
+      ],
+      "hard_limits": [
+        "Pas plus de 8 heures de projet en S47"
+      ],
+      "meeting_slots": [
+        "S47-lun-14",
+        "S47-mer-14",
+        "S47-mer-18",
+        "S47-ven-20",
+        "S48-dim-18",
+        "S48-dim-20",
+        "S48-jeu-14",
+        "S48-lun-10",
+        "S48-mar-18",
+        "S48-mer-10",
+        "S48-sam-10",
+        "S49-dim-20",
+        "S49-jeu-20",
+        "S49-mar-14",
+        "S49-mar-20",
+        "S49-sam-14"
+      ]
+    },
+    {
+      "id": "m3",
+      "name": "Bastien",
+      "skills": {
+        "dev_python": 4,
+        "ia_llm": 4,
+        "front_demo": 2,
+        "redaction": 3,
+        "presentation": 1,
+        "test_eval": 1,
+        "devops": 3
+      },
+      "capacity_hours": {
+        "S47": 21.0,
+        "S48": 3.0,
+        "S49": 4.0
+      },
+      "max_tasks_per_week": 2,
+      "preferences": [
+        "dev_python"
+      ],
+      "dislikes": [
+        "test_eval"
+      ],
+      "hard_limits": [
+        "Pas plus de 3 heures de projet en S48",
+        "Pas plus de 4 heures de projet en S49"
+      ],
+      "meeting_slots": [
+        "S47-lun-14",
+        "S47-lun-18",
+        "S47-mer-14",
+        "S47-mer-18",
+        "S47-ven-10",
+        "S47-ven-14",
+        "S47-ven-18",
+        "S47-ven-20",
+        "S48-dim-18",
+        "S48-jeu-14",
+        "S48-mar-18",
+        "S48-mer-10",
+        "S48-mer-14",
+        "S48-sam-10",
+        "S49-dim-20",
+        "S49-jeu-18",
+        "S49-jeu-20",
+        "S49-lun-10",
+        "S49-mar-20",
+        "S49-sam-14"
+      ]
+    },
+    {
+      "id": "m4",
+      "name": "Léa",
+      "skills": {
+        "dev_python": 3,
+        "ia_llm": 4,
+        "front_demo": 5,
+        "redaction": 1,
+        "presentation": 3,
+        "test_eval": 3,
+        "devops": 1
+      },
+      "capacity_hours": {
+        "S47": 5.0,
+        "S48": 21.0,
+        "S49": 25.0
+      },
+      "max_tasks_per_week": 4,
+      "preferences": [
+        "ia_llm",
+        "front_demo"
+      ],
+      "dislikes": [
+        "redaction"
+      ],
+      "hard_limits": [
+        "Pas plus de 5 heures de projet en S47"
+      ],
+      "meeting_slots": [
+        "S47-lun-18",
+        "S47-mer-14",
+        "S47-mer-18",
+        "S47-ven-14",
+        "S48-dim-18",
+        "S48-dim-20",
+        "S48-lun-10",
+        "S48-mer-10",
+        "S48-mer-14",
+        "S48-sam-10",
+        "S49-dim-20",
+        "S49-jeu-18",
+        "S49-jeu-20",
+        "S49-lun-10",
+        "S49-mar-14",
+        "S49-mar-20"
+      ]
+    },
+    {
+      "id": "m5",
+      "name": "Hugo",
+      "skills": {
+        "dev_python": 3,
+        "ia_llm": 1,
+        "front_demo": 1,
+        "redaction": 2,
+        "presentation": 3,
+        "test_eval": 5,
+        "devops": 5
+      },
+      "capacity_hours": {
+        "S47": 4.0,
+        "S48": 24.0,
+        "S49": 24.0
+      },
+      "max_tasks_per_week": null,
+      "preferences": [
+        "devops"
+      ],
+      "dislikes": [
+        "ia_llm"
+      ],
+      "hard_limits": [
+        "Pas plus de 4 heures de projet en S47"
+      ],
+      "meeting_slots": [
+        "S47-lun-14",
+        "S47-lun-18",
+        "S47-mer-14",
+        "S47-mer-18",
+        "S47-ven-14",
+        "S47-ven-18",
+        "S47-ven-20",
+        "S48-dim-18",
+        "S48-dim-20",
+        "S48-lun-10",
+        "S48-mar-18",
+        "S48-mer-10",
+        "S48-mer-14",
+        "S48-sam-10",
+        "S49-dim-20",
+        "S49-jeu-20",
+        "S49-lun-10",
+        "S49-mar-14",
+        "S49-mar-20",
+        "S49-sam-14"
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "id": "T01",
+      "title": "Tâche 1 (devops)",
+      "skill": "devops",
+      "min_level": 3,
+      "hours": 10.0,
+      "deadline": "S49",
+      "depends_on": []
+    },
+    {
+      "id": "T02",
+      "title": "Tâche 2 (presentation)",
+      "skill": "presentation",
+      "min_level": 3,
+      "hours": 5.0,
+      "deadline": "S47",
+      "depends_on": []
+    },
+    {
+      "id": "T03",
+      "title": "Tâche 3 (redaction)",
+      "skill": "redaction",
+      "min_level": 3,
+      "hours": 1.0,
+      "deadline": "S47",
+      "depends_on": [
+        "T01"
+      ]
+    },
+    {
+      "id": "T04",
+      "title": "Tâche 4 (redaction)",
+      "skill": "redaction",
+      "min_level": 1,
+      "hours": 14.0,
+      "deadline": "S47",
+      "depends_on": []
+    },
+    {
+      "id": "T05",
+      "title": "Tâche 5 (dev_python)",
+      "skill": "dev_python",
+      "min_level": 3,
+      "hours": 15.0,
+      "deadline": "S48",
+      "depends_on": []
+    },
+    {
+      "id": "T06",
+      "title": "Tâche 6 (test_eval)",
+      "skill": "test_eval",
+      "min_level": 1,
+      "hours": 17.0,
+      "deadline": "S48",
+      "depends_on": []
+    },
+    {
+      "id": "T07",
+      "title": "Tâche 7 (redaction)",
+      "skill": "redaction",
+      "min_level": 1,
+      "hours": 16.0,
+      "deadline": "S48",
+      "depends_on": [
+        "T05"
+      ]
+    },
+    {
+      "id": "T08",
+      "title": "Tâche 8 (dev_python)",
+      "skill": "dev_python",
+      "min_level": 1,
+      "hours": 2.0,
+      "deadline": "S49",
+      "depends_on": []
+    },
+    {
+      "id": "T09",
+      "title": "Tâche 9 (test_eval)",
+      "skill": "test_eval",
+      "min_level": 2,
+      "hours": 4.0,
+      "deadline": "S49",
+      "depends_on": []
+    },
+    {
+      "id": "T10",
+      "title": "Tâche 10 (test_eval)",
+      "skill": "test_eval",
+      "min_level": 2,
+      "hours": 18.0,
+      "deadline": "S49",
+      "depends_on": []
+    }
+  ],
+  "meetings_needed": 3,
+  "events": [
+    {
+      "trigger_round": 1,
+      "type": "absence",
+      "member_id": "m3",
+      "weeks": [
+        "S49"
+      ],
+      "task": null,
+      "task_id": null,
+      "new_deadline": null
+    },
+    {
+      "trigger_round": 2,
+      "type": "deadline_change",
+      "member_id": null,
+      "weeks": [],
+      "task": null,
+      "task_id": "T05",
+      "new_deadline": "S47"
+    },
+    {
+      "trigger_round": 3,
+      "type": "absence",
+      "member_id": "m5",
+      "weeks": [
+        "S49"
+      ],
+      "task": null,
+      "task_id": null,
+      "new_deadline": null
+    }
+  ],
+  "difficulty": "confortable"
+}
