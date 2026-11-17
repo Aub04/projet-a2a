@@ -126,3 +126,35 @@ Ces choix s'appliquent de la même façon aux deux architectures, sauf mention c
 - Mesure sur le PC d'Aubin (i7-1260P, 16 Go, sans GPU) : décision de candidature d'un agent membre, 547 tokens en
   entrée et 70 en sortie, 59,6 s au premier appel (chargement du modèle) puis 10,9 s.
 - Un modèle 27B a été essayé puis abandonné : 16,8 Go, il ne tient pas dans la mémoire de cette machine.
+
+## 2026-11-17 : point d'étape du jalon (premières exécutions réelles sur notre_groupe)
+
+Les deux architectures ont tourné de bout en bout sur `notre_groupe` avec `qwen3:8b`, sur de vrais serveurs A2A HTTP.
+Traces archivées dans `results/notre_groupe_2026-11-17/`. Une seule exécution par architecture : ce sont des
+observations, pas encore des résultats.
+
+| | p2p | orchestrateur | baseline |
+| --- | --- | --- | --- |
+| tâches attribuées | 15/15 | 10/15 | 15/15 |
+| réunions calées | 1/2 | 2/2 | 2/2 |
+| planning valide | oui | oui | oui |
+| préférences (score) | +0,60 | +0,80 | +0,40 |
+| messages A2A | 258 | 61 | 0 |
+| appels LLM | 113 | 13 | 0 |
+| durée | 1848 s | 902 s | < 1 s |
+
+Constats à vérifier sur les scénarios dev avant d'en tirer quoi que ce soit :
+
+- **Orchestrateur** : les 21 objections reçues sont toutes des contraintes dures (16 capacité, 4 compétence,
+  1 nombre de tâches), concentrées sur S47. En 6 révisions, le modèle n'arrive pas à faire tenir les tâches de S47 dans
+  les heures disponibles ; 5 tâches finissent retirées et escaladées. Le code a bien joué son rôle (aucune violation
+  dans le planning final).
+- **P2P, réunions** : 3 créneaux sont communs à tous, mais les agents n'acceptent que 2 ou 3 des créneaux compatibles
+  à chaque sondage, sans raison liée au profil. Aucun accord n'est trouvé pour la 2e réunion après 5 sondages.
+  Piste de mise au point (sur dev uniquement) : prompt de vote.
+- Hypothèse de départ (orchestrateur plus économe) : cohérente avec cette exécution (4 fois moins de messages,
+  9 fois moins d'appels LLM, 2 fois plus rapide). Hypothèse « p2p respecte mieux les préférences » : pas observée ici
+  (+0,60 contre +0,80), mais l'orchestrateur a attribué moins de tâches, ce qui biaise le score.
+
+Ce qui manque : phase 6 (campagne de mesures ; à 11 s par appel sur ce PC, la campagne test dépasse largement 4 h,
+à mesurer sur le PC de calcul), phase 7 (interface Streamlit), phase 8 (brouillon du rapport).

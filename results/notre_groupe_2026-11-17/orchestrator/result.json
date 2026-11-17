@@ -1,0 +1,207 @@
+{
+  "arch": "orchestrator",
+  "scenario_id": "notre_groupe",
+  "difficulty": "confortable",
+  "repeat": 0,
+  "plan_initial": {
+    "assignments": [
+      {
+        "task_id": "T01",
+        "member_id": "m3",
+        "week": "S47"
+      },
+      {
+        "task_id": "T02",
+        "member_id": "m2",
+        "week": "S47"
+      },
+      {
+        "task_id": "T05",
+        "member_id": "m3",
+        "week": "S47"
+      },
+      {
+        "task_id": "T06",
+        "member_id": "m1",
+        "week": "S47"
+      },
+      {
+        "task_id": "T08",
+        "member_id": "m1",
+        "week": "S48"
+      },
+      {
+        "task_id": "T09",
+        "member_id": "m3",
+        "week": "S48"
+      },
+      {
+        "task_id": "T10",
+        "member_id": "m4",
+        "week": "S48"
+      },
+      {
+        "task_id": "T11",
+        "member_id": "m5",
+        "week": "S48"
+      },
+      {
+        "task_id": "T13",
+        "member_id": "m5",
+        "week": "S49"
+      },
+      {
+        "task_id": "T15",
+        "member_id": "m5",
+        "week": "S49"
+      }
+    ],
+    "meetings": [
+      "S47-mar-14",
+      "S48-lun-20"
+    ],
+    "unassigned": [
+      "T03",
+      "T04",
+      "T07",
+      "T12",
+      "T14"
+    ],
+    "escalations": [
+      "Tâche T03 retirée du planning : objection non levée après 6 révisions",
+      "Tâche T04 retirée du planning : objection non levée après 6 révisions",
+      "Tâche T07 retirée du planning : objection non levée après 6 révisions",
+      "Tâche T12 retirée du planning : objection non levée après 6 révisions",
+      "Tâche T14 retirée du planning : objection non levée après 6 révisions"
+    ]
+  },
+  "report_initial": {
+    "valid": true,
+    "violations": [],
+    "violation_counts": {
+      "format": 0,
+      "capacite": 0,
+      "competence": 0,
+      "echeance": 0,
+      "dependance": 0,
+      "max_taches": 0,
+      "reunion": 0
+    },
+    "assigned_ratio": 0.6666666666666666,
+    "preference_ratio": 0.8,
+    "dislike_ratio": 0.0,
+    "load_balance": 0.6738502233474434,
+    "meetings_ratio": 1.0,
+    "escalation_correct": null,
+    "silent_failure": false
+  },
+  "plan": {
+    "assignments": [
+      {
+        "task_id": "T01",
+        "member_id": "m3",
+        "week": "S47"
+      },
+      {
+        "task_id": "T02",
+        "member_id": "m2",
+        "week": "S47"
+      },
+      {
+        "task_id": "T05",
+        "member_id": "m3",
+        "week": "S47"
+      },
+      {
+        "task_id": "T06",
+        "member_id": "m1",
+        "week": "S47"
+      },
+      {
+        "task_id": "T08",
+        "member_id": "m1",
+        "week": "S48"
+      },
+      {
+        "task_id": "T09",
+        "member_id": "m3",
+        "week": "S48"
+      },
+      {
+        "task_id": "T10",
+        "member_id": "m4",
+        "week": "S48"
+      },
+      {
+        "task_id": "T11",
+        "member_id": "m5",
+        "week": "S48"
+      },
+      {
+        "task_id": "T13",
+        "member_id": "m5",
+        "week": "S49"
+      },
+      {
+        "task_id": "T15",
+        "member_id": "m5",
+        "week": "S49"
+      }
+    ],
+    "meetings": [
+      "S47-mar-14",
+      "S48-lun-20"
+    ],
+    "unassigned": [
+      "T03",
+      "T04",
+      "T07",
+      "T12",
+      "T14"
+    ],
+    "escalations": [
+      "Tâche T03 retirée du planning : objection non levée après 6 révisions",
+      "Tâche T04 retirée du planning : objection non levée après 6 révisions",
+      "Tâche T07 retirée du planning : objection non levée après 6 révisions",
+      "Tâche T12 retirée du planning : objection non levée après 6 révisions",
+      "Tâche T14 retirée du planning : objection non levée après 6 révisions"
+    ]
+  },
+  "report": {
+    "valid": true,
+    "violations": [],
+    "violation_counts": {
+      "format": 0,
+      "capacite": 0,
+      "competence": 0,
+      "echeance": 0,
+      "dependance": 0,
+      "max_taches": 0,
+      "reunion": 0
+    },
+    "assigned_ratio": 0.6666666666666666,
+    "preference_ratio": 0.8,
+    "dislike_ratio": 0.0,
+    "load_balance": 0.6738502233474434,
+    "meetings_ratio": 1.0,
+    "escalation_correct": null,
+    "silent_failure": false
+  },
+  "events": [],
+  "stats": {
+    "messages": 61,
+    "messages_by_type": {
+      "INFO_REQUEST": 5,
+      "INFO_REPLY": 5,
+      "PLAN_PROPOSAL": 23,
+      "PLAN_FEEDBACK": 23,
+      "PLAN_FINAL": 5
+    },
+    "llm_calls": 13,
+    "tokens_in": 18667,
+    "tokens_out": 3207,
+    "llm_seconds": 964.96
+  },
+  "duration": 902.03,
+  "error": null
+}

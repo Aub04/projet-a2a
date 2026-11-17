@@ -1,0 +1,238 @@
+{
+  "arch": "p2p",
+  "scenario_id": "notre_groupe",
+  "difficulty": "confortable",
+  "repeat": 0,
+  "plan_initial": {
+    "assignments": [
+      {
+        "task_id": "T01",
+        "member_id": "m1",
+        "week": "S47"
+      },
+      {
+        "task_id": "T02",
+        "member_id": "m2",
+        "week": "S47"
+      },
+      {
+        "task_id": "T03",
+        "member_id": "m3",
+        "week": "S47"
+      },
+      {
+        "task_id": "T04",
+        "member_id": "m4",
+        "week": "S47"
+      },
+      {
+        "task_id": "T05",
+        "member_id": "m5",
+        "week": "S47"
+      },
+      {
+        "task_id": "T06",
+        "member_id": "m1",
+        "week": "S47"
+      },
+      {
+        "task_id": "T07",
+        "member_id": "m3",
+        "week": "S47"
+      },
+      {
+        "task_id": "T08",
+        "member_id": "m4",
+        "week": "S48"
+      },
+      {
+        "task_id": "T09",
+        "member_id": "m3",
+        "week": "S48"
+      },
+      {
+        "task_id": "T10",
+        "member_id": "m5",
+        "week": "S48"
+      },
+      {
+        "task_id": "T11",
+        "member_id": "m3",
+        "week": "S48"
+      },
+      {
+        "task_id": "T12",
+        "member_id": "m2",
+        "week": "S49"
+      },
+      {
+        "task_id": "T13",
+        "member_id": "m5",
+        "week": "S49"
+      },
+      {
+        "task_id": "T14",
+        "member_id": "m5",
+        "week": "S49"
+      },
+      {
+        "task_id": "T15",
+        "member_id": "m2",
+        "week": "S49"
+      }
+    ],
+    "meetings": [
+      "S48-sam-10"
+    ],
+    "unassigned": [],
+    "escalations": [
+      "Aucun créneau commun trouvé pour la réunion n°2"
+    ]
+  },
+  "report_initial": {
+    "valid": true,
+    "violations": [],
+    "violation_counts": {
+      "format": 0,
+      "capacite": 0,
+      "competence": 0,
+      "echeance": 0,
+      "dependance": 0,
+      "max_taches": 0,
+      "reunion": 0
+    },
+    "assigned_ratio": 1.0,
+    "preference_ratio": 0.6,
+    "dislike_ratio": 0.0,
+    "load_balance": 0.37876254192111974,
+    "meetings_ratio": 0.5,
+    "escalation_correct": null,
+    "silent_failure": false
+  },
+  "plan": {
+    "assignments": [
+      {
+        "task_id": "T01",
+        "member_id": "m1",
+        "week": "S47"
+      },
+      {
+        "task_id": "T02",
+        "member_id": "m2",
+        "week": "S47"
+      },
+      {
+        "task_id": "T03",
+        "member_id": "m3",
+        "week": "S47"
+      },
+      {
+        "task_id": "T04",
+        "member_id": "m4",
+        "week": "S47"
+      },
+      {
+        "task_id": "T05",
+        "member_id": "m5",
+        "week": "S47"
+      },
+      {
+        "task_id": "T06",
+        "member_id": "m1",
+        "week": "S47"
+      },
+      {
+        "task_id": "T07",
+        "member_id": "m3",
+        "week": "S47"
+      },
+      {
+        "task_id": "T08",
+        "member_id": "m4",
+        "week": "S48"
+      },
+      {
+        "task_id": "T09",
+        "member_id": "m3",
+        "week": "S48"
+      },
+      {
+        "task_id": "T10",
+        "member_id": "m5",
+        "week": "S48"
+      },
+      {
+        "task_id": "T11",
+        "member_id": "m3",
+        "week": "S48"
+      },
+      {
+        "task_id": "T12",
+        "member_id": "m2",
+        "week": "S49"
+      },
+      {
+        "task_id": "T13",
+        "member_id": "m5",
+        "week": "S49"
+      },
+      {
+        "task_id": "T14",
+        "member_id": "m5",
+        "week": "S49"
+      },
+      {
+        "task_id": "T15",
+        "member_id": "m2",
+        "week": "S49"
+      }
+    ],
+    "meetings": [
+      "S48-sam-10"
+    ],
+    "unassigned": [],
+    "escalations": [
+      "Aucun créneau commun trouvé pour la réunion n°2"
+    ]
+  },
+  "report": {
+    "valid": true,
+    "violations": [],
+    "violation_counts": {
+      "format": 0,
+      "capacite": 0,
+      "competence": 0,
+      "echeance": 0,
+      "dependance": 0,
+      "max_taches": 0,
+      "reunion": 0
+    },
+    "assigned_ratio": 1.0,
+    "preference_ratio": 0.6,
+    "dislike_ratio": 0.0,
+    "load_balance": 0.37876254192111974,
+    "meetings_ratio": 0.5,
+    "escalation_correct": null,
+    "silent_failure": false
+  },
+  "events": [],
+  "stats": {
+    "messages": 258,
+    "messages_by_type": {
+      "CFP": 60,
+      "REFUSAL": 24,
+      "PROPOSAL": 36,
+      "AWARD_NOTICE": 60,
+      "AWARD": 7,
+      "CONFIRM": 7,
+      "MEETING_POLL": 32,
+      "MEETING_VOTE": 32
+    },
+    "llm_calls": 113,
+    "tokens_in": 69423,
+    "tokens_out": 5554,
+    "llm_seconds": 3919.46
+  },
+  "duration": 1848.44,
+  "error": null
+}

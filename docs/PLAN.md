@@ -34,13 +34,13 @@ Cocher une case seulement quand l'étape fonctionne et que `uv run pytest` passe
 - [x] Protocole Contract Net (section 9) : CFP, propositions, attribution, confirmation, relances, escalade
 - [x] Sondage de réunions
 - [x] Tests du protocole avec FakeLLM
-- [ ] **À FAIRE (profils + Ollama)** Exécution réelle de bout en bout sur `notre_groupe` : planning produit, validé, trace lisible
+- [x] Exécution réelle de bout en bout sur `notre_groupe` : planning produit, validé, trace lisible
 
 ## Phase 4. Architecture orchestrateur
 
 - [x] Agent orchestrateur (serveur A2A) : collecte, planning, révisions (section 10)
 - [x] Tests avec FakeLLM
-- [ ] **À FAIRE (profils + Ollama)** Exécution réelle de bout en bout sur `notre_groupe`
+- [x] Exécution réelle de bout en bout sur `notre_groupe`
 - [x] Commande unique : `uv run python -m a2a_team.run_demo --arch p2p|orchestrator|baseline --scenario notre_groupe`
 
 **Fin du jalon du vendredi 20 novembre.** Écrire dans `docs/DECISIONS.md` un point d'étape : ce qui marche, ce qui manque.
