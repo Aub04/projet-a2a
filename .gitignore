@@ -7,3 +7,5 @@ runs/
 .llm_cache/
 .env
 results/*/llm_cache/
+results/campagne_*/runs/
+results/*.zip
