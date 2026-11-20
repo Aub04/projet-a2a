@@ -158,3 +158,54 @@ Constats à vérifier sur les scénarios dev avant d'en tirer quoi que ce soit :
 
 Ce qui manque : phase 6 (campagne de mesures ; à 11 s par appel sur ce PC, la campagne test dépasse largement 4 h,
 à mesurer sur le PC de calcul), phase 7 (interface Streamlit), phase 8 (brouillon du rapport).
+
+## 2026-11-20 : préparation de la campagne finale
+
+Changements de comportement, réglés sur `dev` uniquement (aucun regard sur `test`) :
+
+1. **Vote de réunion par refus (p2p).** Le 17/11, les agents n'acceptaient que 2 ou 3 des créneaux compatibles, avec
+   des préférences inventées (« évite les mercredis » sans rien de tel dans le profil), et la 2e réunion n'a pas été
+   calée. Le schéma de réponse devient `{"refused": [...], "reason": "..."}` : un créneau compatible est accepté sauf
+   refus motivé par le profil. Le prompt `member_vote.txt` est commun aux deux architectures (seul le p2p fait des
+   sondages). Impact : favorise le p2p sur `meetings_ratio`, ce qui corrige un défaut de prompt, pas du protocole.
+2. **Aides de révision de l'orchestrateur** (`limits.orchestrator_hints`, activé par défaut). Le 17/11, les
+   21 objections étaient des dépassements d'heures que le LLM n'arrivait pas à corriger en 6 révisions (5 tâches
+   retirées). Au moment d'une révision, le code ajoute au prompt le tableau de charge du planning précédent
+   (heures prévues / disponibles par membre et semaine), une proposition de place pour chaque tâche contestée (les
+   propositions tiennent ensemble : elles sont réservées l'une après l'autre) et la liste des créneaux de réunion
+   libres pour tous. Un premier essai avec des options calculées tâche par tâche montrait le modèle déplacer un bloc
+   de 4 tâches d'un membre à un seul autre (dev_1013). Ces calculs n'utilisent que ce que l'orchestrateur a reçu
+   (`INFO_REPLY`). C'est
+   l'application à l'orchestrateur de la règle déjà suivie par les membres : « le LLM choisit parmi des options
+   faisables, il ne calcule pas ». Le premier planning reste produit sans aide, et le code ne corrige rien lui-même.
+   Impact : favorise l'orchestrateur sur `assigned_ratio`. Pour mesurer l'effet, une campagne avec
+   `orchestrator_hints: false` reste possible. **[À VALIDER PAR LE GROUPE]**
+3. **Graine par répétition.** Avec `seed: 42` fixe et une température de 0,2, les 3 répétitions donnaient les mêmes
+   réponses. La graine envoyée au LLM devient `seed + numéro de répétition` (42, 43, 44), identique pour les deux
+   architectures. Sans cela la mesure de stabilité n'a pas de sens.
+
+Campagne (`src/a2a_team/eval/`, lancement en une commande par `campagne.cmd` ou `campagne.sh`) :
+
+- ordre : répétition 1 sur les 50 scénarios test, puis 2, puis 3 ; difficultés alternées. Une campagne arrêtée en
+  route donne déjà une répétition complète et équilibrée ; reprise automatique ;
+- la baseline est déterministe : une seule exécution par scénario ;
+- une exécution en panne d'infrastructure (Ollama arrêté, port occupé) n'est pas enregistrée et sera refaite ;
+  une erreur du LLM (JSON invalide, budget d'appels) est un résultat et reste enregistrée ;
+- `meta.json` garde la machine, le GPU, la version d'Ollama, l'empreinte du modèle et le commit git de chaque session.
+
+Budget : sur le PC d'Aubin (CPU seul), un scénario test prendrait environ 50 min pour les deux architectures, soit
+plus de 120 h pour 3 répétitions. La campagne tourne donc sur le PC de calcul. L'estimation est affichée au
+lancement à partir d'un appel mesuré ; elle dépasse 4 h dans tous les cas réalistes, d'où l'ordre par répétition et
+l'option `--max-hours`.
+
+**Scénario de démo tendu.** `notre_groupe` est confortable (la baseline le résout seule). `notre_groupe_tendu`
+(`uv run python -m a2a_team.scenarios.tendu_demo`) garde nos membres, tâches et créneaux avec 80 % des heures
+disponibles : une recherche exhaustive trouve un planning complet, la baseline n'attribue que 14 tâches sur 15.
+Il sert à la démonstration seulement. La comparaison chiffrée avec la baseline se fait sur le split test, qui
+contient déjà 20 scénarios tendus où la baseline ne trouve jamais de solution complète alors qu'il en existe une.
+Rien ne garantit à l'avance que les agents fassent mieux : c'est ce que la campagne mesure.
+
+Essai réel partiel de la version finale (orchestrateur sur `dev_1013`, interrompu après 4 plannings, 612 s) : les
+4 plannings sont au bon format, les aides apparaissent dans le prompt. Les objections baissent à la 2e et 3e révision
+(2 membres acceptent), puis le modèle remet un créneau de réunion déjà refusé et laisse T10 sur un membre sans place.
+Pas de conclusion possible sur une exécution partielle : la campagne mesurera.

@@ -52,12 +52,12 @@ Cocher une case seulement quand l'étape fonctionne et que `uv run pytest` passe
 
 ## Phase 6. Évaluation
 
-- [ ] `eval/metrics.py` et `eval/run.py` (reprise après interruption)
+- [x] `eval/metrics.py` et `eval/run.py` (reprise après interruption)
 - [ ] Mesurer le temps moyen sur `dev`, estimer la campagne test ; demander à l'humain si plus de 4 h
-- [ ] Mise au point des prompts sur `dev` uniquement (noter chaque changement dans DECISIONS.md)
+- [x] Mise au point des prompts sur `dev` uniquement (noter chaque changement dans DECISIONS.md) : vote par refus, aides de révision (20/11)
 - [ ] Campagne finale sur `test` : p2p, orchestrateur, baseline, 3 répétitions
-- [ ] `summary.csv` + figures dans `rapport/figures/`
-- [ ] Export de la notation à l'aveugle pour `notre_groupe`
+- [ ] `summary.csv` + figures (produits par la campagne dans `results/campagne_test/`, à copier dans `rapport/figures/`)
+- [x] Export de la notation à l'aveugle pour `notre_groupe` (code prêt, fait par la campagne)
 
 ## Phase 7. Démo
 

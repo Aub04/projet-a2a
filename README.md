@@ -21,7 +21,7 @@ Prérequis : Git, [uv](https://docs.astral.sh/uv/) et [Ollama](https://ollama.co
 git clone <url-du-depot> projet-a2a
 cd projet-a2a
 uv sync                       # crée .venv avec les versions épinglées
-uv run pytest                 # 40 tests, sans LLM (faux LLM scripté)
+uv run pytest                 # 49 tests, sans LLM (faux LLM scripté)
 ollama pull qwen3:8b          # environ 5 Go ; il faut idéalement un GPU avec 8 Go de mémoire
 ```
 
@@ -65,6 +65,40 @@ Chaque exécution écrit dans `runs/<date>_<arch>_<scenario>/` :
 
 `runs/` n'est pas versionné.
 
+## Campagne de mesures (PC de calcul, une seule commande)
+
+Prérequis : Git, et de préférence une carte NVIDIA avec 8 Go de mémoire vidéo. Le script installe uv et Ollama s'ils
+manquent, démarre Ollama, télécharge le modèle, installe les dépendances, lance les tests, puis la campagne.
+
+```bash
+git pull
+.\campagne.cmd            # Windows (ou double-clic sur campagne.cmd)
+./campagne.sh             # Linux / macOS
+```
+
+Options : `-Runs 1` / `--runs 1` (une seule répétition), `-MaxHours 8` / `--max-hours 8` (arrêt propre après 8 h),
+`-SansDemo` / `--sans-demo`. Pour reprendre après un arrêt (Ctrl+C, coupure, limite d'heures), relancer la même
+commande : les exécutions déjà faites sont sautées. La campagne fait d'abord une répétition complète sur les
+50 scénarios, puis la 2e, puis la 3e : on peut s'arrêter entre deux.
+
+Ce qui est produit :
+
+- `results/campagne_demo/` : `notre_groupe` et `notre_groupe_tendu`, une exécution par architecture ;
+- `results/notation_aveugle/` : plannings A et B à noter par chaque membre (`notes.csv`), correspondance à part ;
+- `results/campagne_test/` : `runs.jsonl` (une ligne par exécution), `summary.csv`, `stabilite.csv`, `resume.md`
+  (tableaux prêts à lire), `figures/*.png`, `meta.json` (machine, GPU, version d'Ollama, modèle, commit) ;
+- `results/resultats_<date>.zip` : tout cela (traces comprises) à renvoyer au groupe.
+
+Commandes séparées si besoin :
+
+```bash
+uv run python -m a2a_team.eval.run --split test --archs p2p orchestrator baseline --runs 3
+uv run python -m a2a_team.eval.run --split test --summary-only      # régénère résumé et figures
+uv run python -m a2a_team.eval.notation results/campagne_demo --scenario notre_groupe
+uv run python -m a2a_team.eval.campagne --essai C:/tmp/essai --runs 1   # essai technique avec faux LLM
+uv run python -m a2a_team.scenarios.tendu_demo                       # régénère notre_groupe_tendu
+```
+
 ## Organisation du code
 
 ```
@@ -79,6 +113,7 @@ src/a2a_team/
   a2a_layer/          serveur A2A, transports HTTP et mémoire, lanceur, trace
   architectures/runner.py   déroulé commun, imprévus, mesures
   scenarios/          générateur (dev 20, test 50 figés) et scénario notre_groupe
+  eval/               campagne de mesures, résumé, figures, notation à l'aveugle
   run_demo.py         commande unique
 data/
   profiles/           profils des 5 membres (à remplir)
