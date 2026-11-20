@@ -1,0 +1,376 @@
+{
+  "id": "notre_groupe_tendu",
+  "split": "demo",
+  "seed": 0,
+  "weeks": [
+    "S47",
+    "S48",
+    "S49"
+  ],
+  "members": [
+    {
+      "id": "m1",
+      "name": "Aubin",
+      "skills": {
+        "dev_python": 4,
+        "ia_llm": 4,
+        "front_demo": 4,
+        "redaction": 2,
+        "presentation": 3,
+        "test_eval": 3,
+        "devops": 3
+      },
+      "capacity_hours": {
+        "S47": 14.0,
+        "S48": 4.0,
+        "S49": 4.5
+      },
+      "max_tasks_per_week": 3,
+      "preferences": [
+        "ia_llm",
+        "dev_python"
+      ],
+      "dislikes": [
+        "redaction"
+      ],
+      "hard_limits": [
+        "Pas plus de 5 heures de projet en S48 : alternance la journée et clients freelance le soir",
+        "Jamais de projet le mercredi soir, réservé aux clients freelance"
+      ],
+      "meeting_slots": [
+        "S47-mar-14",
+        "S47-jeu-10",
+        "S47-ven-14",
+        "S48-lun-20",
+        "S48-sam-10",
+        "S49-mar-20",
+        "S49-dim-18"
+      ]
+    },
+    {
+      "id": "m2",
+      "name": "Gaël",
+      "skills": {
+        "dev_python": 2,
+        "ia_llm": 2,
+        "front_demo": 1,
+        "redaction": 5,
+        "presentation": 4,
+        "test_eval": 2,
+        "devops": 3
+      },
+      "capacity_hours": {
+        "S47": 11.0,
+        "S48": 6.0,
+        "S49": 6.0
+      },
+      "max_tasks_per_week": null,
+      "preferences": [
+        "redaction",
+        "presentation"
+      ],
+      "dislikes": [
+        "front_demo"
+      ],
+      "hard_limits": [
+        "Je veux écrire une partie du rapport, pas seulement relire celle des autres",
+        "Pas de réunion avant 10 h"
+      ],
+      "meeting_slots": [
+        "S47-mar-14",
+        "S47-mer-16",
+        "S47-ven-14",
+        "S48-lun-20",
+        "S48-sam-10",
+        "S48-dim-18",
+        "S49-mar-20",
+        "S49-sam-14",
+        "S49-dim-18"
+      ]
+    },
+    {
+      "id": "m3",
+      "name": "Mahdi",
+      "skills": {
+        "dev_python": 3,
+        "ia_llm": 4,
+        "front_demo": 2,
+        "redaction": 3,
+        "presentation": 2,
+        "test_eval": 4,
+        "devops": 2
+      },
+      "capacity_hours": {
+        "S47": 12.5,
+        "S48": 5.5,
+        "S49": 2.0
+      },
+      "max_tasks_per_week": null,
+      "preferences": [
+        "ia_llm",
+        "test_eval"
+      ],
+      "dislikes": [
+        "presentation"
+      ],
+      "hard_limits": [
+        "Mise en production chez mon entreprise en S49 : 3 heures maximum cette semaine-là",
+        "Je ne veux pas présenter seul à l'oral"
+      ],
+      "meeting_slots": [
+        "S47-mar-14",
+        "S47-jeu-10",
+        "S47-ven-14",
+        "S48-lun-20",
+        "S48-mer-20",
+        "S48-sam-10",
+        "S49-dim-18"
+      ]
+    },
+    {
+      "id": "m4",
+      "name": "Thomas",
+      "skills": {
+        "dev_python": 3,
+        "ia_llm": 2,
+        "front_demo": 5,
+        "redaction": 2,
+        "presentation": 3,
+        "test_eval": 2,
+        "devops": 4
+      },
+      "capacity_hours": {
+        "S47": 12.0,
+        "S48": 4.5,
+        "S49": 4.5
+      },
+      "max_tasks_per_week": 2,
+      "preferences": [
+        "front_demo",
+        "devops"
+      ],
+      "dislikes": [
+        "redaction"
+      ],
+      "hard_limits": [
+        "Deux tâches par semaine au maximum, sinon je m'éparpille",
+        "Le week-end seulement le samedi matin"
+      ],
+      "meeting_slots": [
+        "S47-mar-14",
+        "S47-jeu-10",
+        "S48-lun-20",
+        "S48-sam-10",
+        "S49-mar-20",
+        "S49-sam-10",
+        "S49-dim-18"
+      ]
+    },
+    {
+      "id": "m5",
+      "name": "Mohammed",
+      "skills": {
+        "dev_python": 3,
+        "ia_llm": 3,
+        "front_demo": 2,
+        "redaction": 4,
+        "presentation": 4,
+        "test_eval": 3,
+        "devops": 1
+      },
+      "capacity_hours": {
+        "S47": 9.5,
+        "S48": 4.5,
+        "S49": 8.0
+      },
+      "max_tasks_per_week": 3,
+      "preferences": [
+        "presentation",
+        "test_eval"
+      ],
+      "dislikes": [
+        "devops"
+      ],
+      "hard_limits": [
+        "Peu disponible en S47 (rendez-vous administratifs) mais plus libre en S49",
+        "Pas de réunion le dimanche"
+      ],
+      "meeting_slots": [
+        "S47-mar-14",
+        "S47-ven-14",
+        "S48-lun-20",
+        "S48-mer-20",
+        "S48-sam-10",
+        "S49-mar-20",
+        "S49-sam-14"
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "id": "T01",
+      "title": "Socle A2A : serveurs, cartes d'agent, format des messages",
+      "skill": "dev_python",
+      "min_level": 3,
+      "hours": 8.0,
+      "deadline": "S47",
+      "depends_on": []
+    },
+    {
+      "id": "T02",
+      "title": "Profils des membres et scénario de démo",
+      "skill": "redaction",
+      "min_level": 1,
+      "hours": 2.0,
+      "deadline": "S47",
+      "depends_on": []
+    },
+    {
+      "id": "T03",
+      "title": "Validateur de planning et algorithme de référence",
+      "skill": "dev_python",
+      "min_level": 3,
+      "hours": 6.0,
+      "deadline": "S47",
+      "depends_on": []
+    },
+    {
+      "id": "T04",
+      "title": "Générateur de scénarios de test",
+      "skill": "dev_python",
+      "min_level": 2,
+      "hours": 5.0,
+      "deadline": "S47",
+      "depends_on": [
+        "T03"
+      ]
+    },
+    {
+      "id": "T05",
+      "title": "Agent membre et prompts",
+      "skill": "ia_llm",
+      "min_level": 3,
+      "hours": 6.0,
+      "deadline": "S47",
+      "depends_on": [
+        "T01"
+      ]
+    },
+    {
+      "id": "T06",
+      "title": "Architecture pair-à-pair",
+      "skill": "ia_llm",
+      "min_level": 3,
+      "hours": 8.0,
+      "deadline": "S47",
+      "depends_on": [
+        "T05"
+      ]
+    },
+    {
+      "id": "T07",
+      "title": "Architecture avec orchestrateur",
+      "skill": "ia_llm",
+      "min_level": 3,
+      "hours": 8.0,
+      "deadline": "S47",
+      "depends_on": [
+        "T05"
+      ]
+    },
+    {
+      "id": "T08",
+      "title": "Gestion des imprévus",
+      "skill": "dev_python",
+      "min_level": 3,
+      "hours": 4.0,
+      "deadline": "S48",
+      "depends_on": [
+        "T06",
+        "T07"
+      ]
+    },
+    {
+      "id": "T09",
+      "title": "Campagne de mesures et figures",
+      "skill": "test_eval",
+      "min_level": 2,
+      "hours": 6.0,
+      "deadline": "S48",
+      "depends_on": [
+        "T04",
+        "T08"
+      ]
+    },
+    {
+      "id": "T10",
+      "title": "Interface de démonstration",
+      "skill": "front_demo",
+      "min_level": 2,
+      "hours": 6.0,
+      "deadline": "S48",
+      "depends_on": [
+        "T06",
+        "T07"
+      ]
+    },
+    {
+      "id": "T11",
+      "title": "Notation à l'aveugle des plannings",
+      "skill": "test_eval",
+      "min_level": 1,
+      "hours": 1.0,
+      "deadline": "S48",
+      "depends_on": [
+        "T06",
+        "T07"
+      ]
+    },
+    {
+      "id": "T12",
+      "title": "Rédaction du rapport : contexte et architectures",
+      "skill": "redaction",
+      "min_level": 2,
+      "hours": 5.0,
+      "deadline": "S49",
+      "depends_on": []
+    },
+    {
+      "id": "T13",
+      "title": "Rédaction du rapport : résultats et analyse",
+      "skill": "redaction",
+      "min_level": 3,
+      "hours": 5.0,
+      "deadline": "S49",
+      "depends_on": [
+        "T09"
+      ]
+    },
+    {
+      "id": "T14",
+      "title": "Support de soutenance",
+      "skill": "presentation",
+      "min_level": 2,
+      "hours": 4.0,
+      "deadline": "S49",
+      "depends_on": [
+        "T09"
+      ]
+    },
+    {
+      "id": "T15",
+      "title": "Répétition de la soutenance et vidéo de secours",
+      "skill": "presentation",
+      "min_level": 1,
+      "hours": 2.0,
+      "deadline": "S49",
+      "depends_on": [
+        "T10",
+        "T14"
+      ]
+    }
+  ],
+  "meetings_needed": 2,
+  "events": [],
+  "difficulty": "tendu"
+}
