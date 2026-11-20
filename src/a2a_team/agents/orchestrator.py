@@ -24,8 +24,9 @@ class OrchestratorAgent:
     id = ORCH_ID
 
     def __init__(self, llm: LLMClient, tracer: Tracer, transport: Transport, member_ids: list[str],
-                 weeks: list[str], max_rounds: int = 6):
+                 weeks: list[str], max_rounds: int = 6, revision_hints: bool = True):
         self.llm = llm
+        self.revision_hints = revision_hints
         self.tracer = tracer
         self.transport = transport
         self.member_ids = member_ids
@@ -98,6 +99,108 @@ class OrchestratorAgent:
                          f"{t.deadline}, dépend de : {', '.join(t.depends_on) or 'aucune'}"
                          for t in self.tasks.values())
 
+    # ------------------------------------------------------------------ aides de révision (calculées par le code)
+    def _contested(self, plan: Plan, objections: dict[str, list]) -> list[str]:
+        out = []
+        for m, lst in objections.items():
+            for o in lst:
+                for item in str(o["item"]).split(","):
+                    item = item.strip()
+                    if item in self.tasks:
+                        out.append(item)
+                    elif item in self.weeks:
+                        out += [a.task_id for a in plan.assignments if a.member_id == m and a.week == item]
+        return list(dict.fromkeys(out))
+
+    def _load(self, plan: Plan, skip: str | None = None) -> tuple[dict, dict]:
+        hours, count = {}, {}
+        for a in plan.assignments:
+            if a.task_id == skip or a.task_id not in self.tasks:
+                continue
+            k = (a.member_id, a.week)
+            hours[k] = hours.get(k, 0) + self.tasks[a.task_id].hours
+            count[k] = count.get(k, 0) + 1
+        return hours, count
+
+    def options_for(self, plan: Plan, tid: str, limit: int = 6) -> list[tuple[str, str, float]]:
+        """Couples (membre, semaine) où la tâche tient sans dépassement, le reste du planning restant inchangé.
+        Calculé uniquement avec les informations reçues des agents (INFO_REPLY) : compétence, heures, maximum de
+        tâches, échéance et dépendances. Les limites écrites en texte libre ne sont pas vérifiées ici."""
+        t = self.tasks[tid]
+        hours, count = self._load(plan, skip=tid)
+        week_of = {a.task_id: a.week for a in plan.assignments if a.task_id != tid}
+        lo = max([self.weeks.index(week_of[d]) for d in t.depends_on if d in week_of], default=0)
+        later = [self.weeks.index(week_of[x.id]) for x in self.tasks.values()
+                 if tid in x.depends_on and x.id in week_of]
+        hi = self.weeks.index(t.deadline) if t.deadline in self.weeks else len(self.weeks) - 1
+        hi = min([hi] + later)
+        out = []
+        for w in self.weeks[lo:hi + 1]:
+            for mid, i in self.infos.items():
+                mx = i["max_tasks_per_week"]
+                free = i["capacity_hours"].get(w, 0) - hours.get((mid, w), 0)
+                if i["skills"].get(t.skill, 0) >= t.min_level and free >= t.hours and \
+                        (mx is None or count.get((mid, w), 0) < mx):
+                    out.append((mid, w, free - t.hours))
+        out.sort(key=lambda x: -x[2])
+        return out[:limit]
+
+    def hints_text(self, plan: Plan, objections: dict[str, list]) -> str:
+        """Tableau de charge du planning précédent et options faisables pour les tâches contestées.
+        Le LLM ne fait pas d'additions d'heures : le code les fait pour lui (DECISIONS.md, 2026-11-20)."""
+        hours, count = self._load(plan)
+        lines = []
+        for mid, i in self.infos.items():
+            for w in self.weeks:
+                cap, h, n = i["capacity_hours"].get(w, 0), hours.get((mid, w), 0), count.get((mid, w), 0)
+                if not n:
+                    continue
+                mx = i["max_tasks_per_week"]
+                flag = []
+                if h > cap:
+                    flag.append(f"DÉPASSEMENT de {h - cap:g} h")
+                if mx is not None and n > mx:
+                    flag.append(f"{n} tâches pour {mx} max")
+                lines.append(f"- {mid} en {w} : {h:g} h prévues sur {cap:g} h disponibles"
+                             + (f" ({', '.join(flag)})" if flag else ""))
+        out = "Charge de ton planning précédent (calculée par le programme) :\n" + "\n".join(lines) + "\n"
+        # Options cohérentes entre elles : les tâches contestées sont retirées, puis replacées une par une (ordre
+        # d'échéance) ; la première option de chaque tâche est réservée avant de calculer celles de la suivante.
+        contested = sorted(self._contested(plan, objections),
+                           key=lambda t: (self.weeks.index(self.tasks[t].deadline)
+                                          if self.tasks[t].deadline in self.weeks else 99, t))
+        work = Plan(assignments=[a for a in plan.assignments if a.task_id not in contested],
+                    meetings=plan.meetings)
+        opts = []
+        for tid in contested:
+            o = self.options_for(work, tid, limit=4)
+            if o:
+                work.assignments.append(Assignment(task_id=tid, member_id=o[0][0], week=o[0][1]))
+                opts.append(f"- {tid} : {o[0][0]} en {o[0][1]}"
+                            + (f" (autres possibilités : {', '.join(f'{m} en {w}' for m, w, _ in o[1:])})"
+                               if len(o) > 1 else ""))
+            else:
+                opts.append(f"- {tid} : aucune place libre, à mettre dans unassigned ou à échanger avec une autre tâche")
+        if opts:
+            out += ("Proposition du programme pour replacer les tâches contestées sans dépassement (compétence, "
+                    "heures, nombre de tâches, échéance et dépendances vérifiés ; les propositions tiennent "
+                    "ensemble) :\n" + "\n".join(opts) + "\n")
+        slots = self.common_slots()
+        out += (f"Créneaux de réunion libres pour tous les membres présents : {', '.join(slots) or 'aucun'}.\n")
+        return out
+
+    def common_slots(self) -> list[str]:
+        all_slots = sorted({s for i in self.infos.values() for s in i.get("meeting_slots", [])})
+        out = []
+        for s in all_slots:
+            try:
+                w = parse_slot(s)[0]
+            except ValueError:
+                continue
+            if all(s in i.get("meeting_slots", []) or i["capacity_hours"].get(w, 0) <= 0 for i in self.infos.values()):
+                out.append(s)
+        return out
+
     def schema(self) -> type[BaseModel]:
         task_ids, members = list(self.tasks), list(self.infos)
         slots = sorted({s for i in self.infos.values() for s in i["meeting_slots"]})
@@ -114,8 +217,10 @@ class OrchestratorAgent:
             obj = "\n".join(f"- {m} : {o['item']} ({o['constraint']}) : {o['reason']}"
                             for m, lst in objections.items() for o in lst) or "aucune"
             ctx += (f"\nTon planning précédent :\n{lines}\nRéunions : {', '.join(previous.meetings) or 'aucune'}\n"
-                    f"Objections reçues des agents :\n{obj}\nCorrige le planning pour lever ces objections, en "
-                    f"gardant ce qui a été accepté autant que possible.\n")
+                    f"Objections reçues des agents :\n{obj}\n")
+            if self.revision_hints:
+                ctx += self.hints_text(previous, objections)
+            ctx += "Corrige le planning pour lever ces objections, en gardant ce qui a été accepté autant que possible.\n"
         system = prompt("orchestrator_system", weeks=", ".join(self.weeks))
         user = prompt("orchestrator_plan", members=self._members_text(), tasks=self._tasks_text(),
                       meetings_needed=self.meetings_needed, context=ctx)

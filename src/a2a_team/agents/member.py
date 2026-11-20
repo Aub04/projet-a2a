@@ -230,11 +230,14 @@ class MemberAgent:
         options = self.available_slots(c["slots"])
         if not options:
             return self.reply("MEETING_VOTE", {"accepted": [], "index": c.get("index")})
-        schema = create_model("Vote", accepted=(list[lit(options)], Field(default_factory=list)), comment=(str, ""))
+        # Vote par refus : un créneau compatible est accepté sauf si le LLM le refuse avec une raison tirée du profil
+        # (voir DECISIONS.md, 2026-11-20). Le vote par liste d'acceptation donnait des refus arbitraires.
+        schema = create_model("Vote", refused=(list[lit(options)], Field(default_factory=list)), reason=(str, ""))
         user = prompt("member_vote", sender=sender, index=c.get("index", 1), slots=", ".join(c["slots"]),
                       options=", ".join(options), name=self.name)
         d = await self.ask("meeting_vote", user, schema, options=options)
-        accepted = list(options) if d is None else [s for s in d.accepted if s in options]
+        refused = set() if d is None else set(d.refused)
+        accepted = [s for s in options if s not in refused]
         return self.reply("MEETING_VOTE", {"accepted": accepted, "index": c.get("index")})
 
     # --- Architecture orchestrateur

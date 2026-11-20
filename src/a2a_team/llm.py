@@ -59,6 +59,12 @@ class LLMClient:
         self.calls = 0
         self.context = context
 
+    @property
+    def run_seed(self) -> int:
+        """Graine de l'exécution : graine de config + numéro de répétition (identique pour les deux architectures).
+        Sans cela, les 3 répétitions d'une campagne donneraient les mêmes réponses (température basse, même graine)."""
+        return self.seed + int(self.context.get("repeat", 0) or 0)
+
     def _cache_key(self, messages, schema_json) -> str:
         blob = json.dumps([self.name, self.model, self.temperature, self.seed, self.context.get("repeat", 0),
                            messages, schema_json], ensure_ascii=False, sort_keys=True)
@@ -120,7 +126,7 @@ class OllamaClient(LLMClient):
 
     def _complete(self, messages, json_schema, meta):
         r = self.client.chat(model=self.model, messages=messages, format=json_schema, think=self.think,
-                             options={"temperature": self.temperature, "seed": self.seed, "num_ctx": self.num_ctx})
+                             options={"temperature": self.temperature, "seed": self.run_seed, "num_ctx": self.num_ctx})
         return r.message.content or "", r.prompt_eval_count, r.eval_count
 
 
@@ -142,7 +148,7 @@ class OpenAICompatClient(LLMClient):
             messages = [dict(messages[0], content=messages[0]["content"] + "\n\nSchéma JSON de la réponse :\n"
                              + json.dumps(json_schema, ensure_ascii=False))] + messages[1:]
         r = self.client.chat.completions.create(model=self.model, messages=messages, temperature=self.temperature,
-                                                seed=self.seed, response_format=rf)
+                                                seed=self.run_seed, response_format=rf)
         u = r.usage
         return r.choices[0].message.content or "", getattr(u, "prompt_tokens", None), getattr(u, "completion_tokens", None)
 
@@ -184,7 +190,7 @@ def default_policy(decision: str, meta: dict) -> dict:
     if decision == "choose_award":
         return {"winner": meta["options"][0], "reason": "première proposition"}
     if decision == "meeting_vote":
-        return {"accepted": list(meta["options"]), "comment": ""}
+        return {"refused": [], "reason": ""}
     if decision == "plan_feedback":
         return {"decision": "accept", "objections": []}
     if decision == "orchestrator_plan":

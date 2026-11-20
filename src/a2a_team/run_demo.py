@@ -95,7 +95,8 @@ def main() -> None:
             print(f"[{ev['ts']:7.1f}s] {ev['sender']:>13} -> {ev['recipient']:<13} {ev['type']:<15} {detail}",
                   flush=True)
 
-    r = run(a.arch, scenario, llm, run_dir, cfg["limits"]["max_rounds"], a.transport, on_event=live)
+    r = run(a.arch, scenario, llm, run_dir, cfg["limits"]["max_rounds"], a.transport, on_event=live,
+            orchestrator_hints=cfg["limits"].get("orchestrator_hints", True))
     print_result(r, scenario)
     print(f"\nTrace : {run_dir}")
 

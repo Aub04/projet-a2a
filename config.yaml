@@ -14,5 +14,6 @@ llm:
 limits:
   max_rounds: 6
   max_llm_calls_per_scenario: 400
+  orchestrator_hints: true    # révisions : charge et options faisables calculées par le code (DECISIONS 20/11)
 eval:
   runs_per_scenario: 3

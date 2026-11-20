@@ -65,7 +65,8 @@ class Session:
     """Agents, serveurs A2A et transport pour une exécution."""
 
     def __init__(self, arch: str, scenario: Scenario, llm: LLMClient, tracer: Tracer, max_rounds: int,
-                 transport: str = "http", port_offset: int = 0):
+                 transport: str = "http", port_offset: int = 0, orchestrator_hints: bool = True):
+        self.orchestrator_hints = orchestrator_hints
         self.arch, self.scenario, self.llm, self.tracer = arch, scenario, llm, tracer
         self.kind, self.port_offset = transport, port_offset
         self.agents = {m.id: MemberAgent(m, scenario.weeks, llm, tracer, max_rounds) for m in scenario.members}
@@ -93,7 +94,7 @@ class Session:
             a.transport = self.transport
         if self.arch == "orchestrator":
             self.orch = OrchestratorAgent(self.llm, self.tracer, self.transport, list(self.agents),
-                                          self.scenario.weeks, self.max_rounds)
+                                          self.scenario.weeks, self.max_rounds, self.orchestrator_hints)
             handlers[ORCH_ID] = self.orch.handle
             if isinstance(self.transport, InMemoryTransport):
                 self.transport.handlers[ORCH_ID] = self.orch.handle
@@ -190,9 +191,10 @@ class Session:
 
 
 async def run_llm_arch(arch: str, scenario: Scenario, llm: LLMClient, tracer: Tracer, max_rounds: int = 6,
-                       transport: str = "http", port_offset: int = 0) -> tuple[Plan, Plan, list[EventResult]]:
+                       transport: str = "http", port_offset: int = 0,
+                       orchestrator_hints: bool = True) -> tuple[Plan, Plan, list[EventResult]]:
     base = scenario.model_copy(deep=True, update={"events": []})
-    async with Session(arch, base, llm, tracer, max_rounds, transport, port_offset) as s:
+    async with Session(arch, base, llm, tracer, max_rounds, transport, port_offset, orchestrator_hints) as s:
         plan0 = await s.negotiate(base)
         plan, current, results = plan0, base, []
         for k, ev in enumerate(sorted(scenario.events, key=lambda e: e.trigger_round)):
@@ -209,7 +211,8 @@ async def run_llm_arch(arch: str, scenario: Scenario, llm: LLMClient, tracer: Tr
 
 def run(arch: str, scenario: Scenario, llm: LLMClient | None = None, run_dir: Path | None = None,
         max_rounds: int = 6, transport: str = "http", repeat: int = 0,
-        on_event: Callable[[dict], None] | None = None, port_offset: int = 0) -> RunResult:
+        on_event: Callable[[dict], None] | None = None, port_offset: int = 0,
+        orchestrator_hints: bool = True) -> RunResult:
     tracer = Tracer(run_dir, on_event)
     t0 = time.time()
     error = None
@@ -230,7 +233,7 @@ def run(arch: str, scenario: Scenario, llm: LLMClient | None = None, run_dir: Pa
         llm.log = tracer.llm
         try:
             plan0, plan, events = asyncio.run(run_llm_arch(arch, scenario, llm, tracer, max_rounds, transport,
-                                                           port_offset))
+                                                           port_offset, orchestrator_hints))
         except Exception as e:  # une exécution ratée est un résultat : on la garde avec son erreur
             error = f"{type(e).__name__}: {e}"
             plan0 = plan = Plan(unassigned=[t.id for t in scenario.tasks], escalations=list(tracer.escalations))
