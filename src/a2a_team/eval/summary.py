@@ -16,16 +16,18 @@ import pandas as pd
 
 from a2a_team.eval.metrics import stability
 
-ARCH_ORDER = ["p2p", "orchestrator", "baseline"]
-ARCH_LABEL = {"p2p": "pair-à-pair", "orchestrator": "orchestrateur", "baseline": "baseline gloutonne"}
+ARCH_ORDER = ["p2p", "orchestrator", "baseline", "oracle"]
+ARCH_LABEL = {"p2p": "pair-à-pair", "orchestrator": "orchestrateur", "baseline": "coordinateur central (déclarations)",
+              "oracle": "oracle (tout connu)"}
 # Trois premiers créneaux de la palette catégorielle de référence (validés tous couples, daltonisme compris).
-ARCH_COLOR = {"p2p": "#2a78d6", "orchestrator": "#eb6834", "baseline": "#1baf7a"}
+ARCH_COLOR = {"p2p": "#2a78d6", "orchestrator": "#eb6834", "baseline": "#1baf7a", "oracle": "#eda100"}
 DIFF_ORDER = ["confortable", "tendu", "impossible", "toutes"]
 
 METRICS = [   # (colonne, libellé, plus haut = mieux ?)
     ("complete", "planning complet et valide", True),
     ("valid", "planning valide", True),
     ("assigned_ratio", "tâches attribuées", True),
+    ("feasible_ratio", "tâches attribuées réalisables", True),
     ("meetings_ratio", "réunions calées", True),
     ("preference_ratio", "score de préférences", True),
     ("dislike_ratio", "tâches évitées attribuées", False),
@@ -39,7 +41,7 @@ METRICS = [   # (colonne, libellé, plus haut = mieux ?)
     ("tokens_in", "tokens en entrée", False),
     ("duration", "durée (s)", False),
 ]
-FIGURES = ["complete", "assigned_ratio", "meetings_ratio", "preference_ratio", "load_balance", "messages",
+FIGURES = ["complete", "feasible_ratio", "assigned_ratio", "meetings_ratio", "preference_ratio", "load_balance", "messages",
            "llm_calls", "duration", "events_valid_ratio", "escalation_correct"]
 
 
@@ -118,13 +120,13 @@ def _fmt(v, std=None, pct=False) -> str:
 
 
 def resume_md(df: pd.DataFrame, agg: pd.DataFrame, stab: pd.DataFrame, paired: pd.DataFrame, camp: Path) -> str:
-    pct = {"complete", "valid", "assigned_ratio", "meetings_ratio", "escalation_correct", "silent_failure",
+    pct = {"complete", "valid", "assigned_ratio", "feasible_ratio", "meetings_ratio", "escalation_correct", "silent_failure",
            "events_valid_ratio", "dislike_ratio"}
     lines = [f"# Résumé de la campagne {camp.name}", "",
              f"{len(df)} exécutions, {df.scenario_id.nunique()} scénarios, "
              f"{int(df.error.notna().sum())} exécutions terminées en erreur. Moyenne ± écart-type. "
              f"Fichier généré automatiquement, ne pas éditer à la main.", ""]
-    shown = ["complete", "assigned_ratio", "meetings_ratio", "preference_ratio", "load_balance",
+    shown = ["complete", "feasible_ratio", "assigned_ratio", "meetings_ratio", "preference_ratio", "load_balance",
              "escalation_correct", "events_valid_ratio", "messages", "llm_calls", "duration"]
     labels = {c: l for c, l, _ in METRICS}
     for d in [x for x in DIFF_ORDER if x in set(agg.difficulty.astype(str))]:
@@ -164,7 +166,8 @@ def make_figures(agg: pd.DataFrame, out: Path) -> None:
     from matplotlib.patches import FancyBboxPatch
 
     out.mkdir(parents=True, exist_ok=True)
-    pct = {"complete", "assigned_ratio", "meetings_ratio", "events_valid_ratio", "escalation_correct"}
+    pct = {"complete", "assigned_ratio", "feasible_ratio", "meetings_ratio", "events_valid_ratio",
+           "escalation_correct"}
     labels = {c: (l, up) for c, l, up in METRICS}
     ink, muted, grid, surface = "#0b0b0b", "#898781", "#e1e0d9", "#fcfcfb"
     plt.rcParams.update({"font.size": 10, "axes.edgecolor": "#c3c2b7", "axes.labelcolor": "#52514e",

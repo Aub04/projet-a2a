@@ -142,9 +142,9 @@ def test_p2p_relance_si_refus_souples(small_scenario, tmp_path):
     assert r.report.assigned_ratio == 1.0
 
 
-@pytest.mark.parametrize("arch", ["p2p", "orchestrator", "baseline"])
+@pytest.mark.parametrize("arch", ["p2p", "orchestrator", "oracle"])
 def test_scenarios_dev_sans_erreur(arch, tmp_path):
     s = load_split("dev")[1]
-    r = run(arch, s, None if arch == "baseline" else FakeLLM(), tmp_path, transport="memory")
+    r = run(arch, s, None if arch == "oracle" else FakeLLM(), tmp_path, transport="memory")
     assert r.error is None
     assert r.report.valid, r.report.violations   # le code empêche toute violation dure côté agents

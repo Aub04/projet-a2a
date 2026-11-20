@@ -23,10 +23,13 @@ from a2a_team.a2a_layer.trace import SYSTEM, Tracer
 from a2a_team.agents.member import MemberAgent
 from a2a_team.agents.orchestrator import ORCH_ID, OrchestratorAgent
 from a2a_team.llm import BudgetExceeded, LLMClient
-from a2a_team.models import Assignment, Plan, Scenario, apply_events
+from a2a_team.models import Assignment, Plan, Scenario, apply_events, public_view
 from a2a_team.validator import Report, validate
 
-ARCHS = ["p2p", "orchestrator", "baseline"]
+ARCHS = ["p2p", "orchestrator", "baseline", "oracle"]
+# baseline : glouton central qui ne connaît que les heures déclarées (situation réelle d'un coordinateur).
+# oracle : même glouton avec toutes les informations privées (borne de ce qu'apporterait la centralisation).
+NO_LLM = ("baseline", "oracle")
 
 
 class EventResult(BaseModel):
@@ -217,14 +220,15 @@ def run(arch: str, scenario: Scenario, llm: LLMClient | None = None, run_dir: Pa
     t0 = time.time()
     error = None
     events: list[EventResult] = []
-    if arch == "baseline":
+    if arch in NO_LLM:
+        view = (lambda s: s) if arch == "oracle" else public_view   # ce que le planificateur a le droit de voir
         base = scenario.model_copy(deep=True, update={"events": []})
-        plan0 = baseline.solve(base)
-        plan = baseline.solve(scenario)
+        plan0 = baseline.solve(view(base))
+        plan = baseline.solve(view(scenario))
         current = base
         for ev in sorted(scenario.events, key=lambda e: e.trigger_round):
             current = apply_events(current, [ev])
-            rep = validate(current, baseline.solve(current, False), apply_scenario_events=False)
+            rep = validate(current, baseline.solve(view(current), False), apply_scenario_events=False)
             events.append(EventResult(type=ev.type, valid_after=rep.valid, assigned_ratio_after=rep.assigned_ratio,
                                       messages=0, llm_calls=0))
     else:

@@ -11,7 +11,7 @@ from itertools import combinations
 from statistics import mean
 
 from a2a_team.architectures.runner import RunResult
-from a2a_team.models import Scenario
+from a2a_team.models import Scenario, apply_events
 
 
 def assignment_keys(plan) -> list[str]:
@@ -37,6 +37,7 @@ def run_row(r: RunResult, scenario: Scenario, campagne: str, run_dir: str = "") 
         "n_violations": len(rep.violations),
         "violation_types": dict(Counter(v.type for v in rep.violations)),
         "assigned_ratio": rep.assigned_ratio,
+        "feasible_ratio": feasible_ratio(scenario, r.plan),
         "complete": rep.valid and rep.assigned_ratio == 1.0 and rep.meetings_ratio == 1.0,
         "preference_ratio": rep.preference_ratio,
         "dislike_ratio": rep.dislike_ratio,
@@ -65,6 +66,36 @@ def run_row(r: RunResult, scenario: Scenario, campagne: str, run_dir: str = "") 
         "n_escalations": len(r.plan.escalations),
         "run_dir": run_dir,
     }
+
+
+def feasible_ratio(scenario: Scenario, plan) -> float:
+    """Part des tâches attribuées de façon réalisable avec les vraies contraintes : qualification, échéance,
+    dépendances respectées, et case (membre, semaine) sans dépassement d'heures ni du nombre de tâches.
+    Pour un planning invalide, les tâches d'une case surchargée comptent toutes comme non réalisables."""
+    s = apply_events(scenario)
+    tasks, members = {t.id: t for t in s.tasks}, {m.id: m for m in s.members}
+    week_of = {a.task_id: a.week for a in plan.assignments}
+    hours, count = Counter(), Counter()
+    for a in plan.assignments:
+        if a.task_id in tasks and a.member_id in members:
+            hours[(a.member_id, a.week)] += tasks[a.task_id].hours
+            count[(a.member_id, a.week)] += 1
+    ok = 0
+    for a in plan.assignments:
+        t, m = tasks.get(a.task_id), members.get(a.member_id)
+        if not t or not m or a.week not in s.weeks:
+            continue
+        cell = (a.member_id, a.week)
+        if m.level(t.skill) < t.min_level or s.week_index(a.week) > s.week_index(t.deadline):
+            continue
+        if any(d in week_of and s.week_index(a.week) < s.week_index(week_of[d]) for d in t.depends_on):
+            continue
+        if hours[cell] > m.capacity_hours.get(a.week, 0) + 1e-9:
+            continue
+        if m.max_tasks_per_week is not None and count[cell] > m.max_tasks_per_week:
+            continue
+        ok += 1
+    return ok / len(tasks) if tasks else 1.0
 
 
 def run_key(scenario_id: str, arch: str, repeat: int) -> str:

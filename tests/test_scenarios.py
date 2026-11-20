@@ -27,7 +27,7 @@ def test_split_test_fige():
     """Le split test ne doit jamais changer (hash noté dans docs/DECISIONS.md)."""
     if not (SCEN_DIR / "test").exists():
         pytest.skip("split test non généré")
-    assert split_hash("test") == "666c84da46a73aeeac5cf0f6233dd28c8c3f250f8be90e38188193a87c086f98"
+    assert split_hash("test") == "0a8369c6a2996509cb6a8dc8f17b3d0607bc089d9bada209d324354c3ee89a78"
     assert len(load_split("test")) == 50
 
 

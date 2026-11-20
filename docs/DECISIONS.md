@@ -217,3 +217,25 @@ agents, consultation de tous les membres) : avec plusieurs requêtes traitées e
 plus vite. Les durées mesurées dépendent donc de la machine et de ce réglage, noté dans `meta.json` ; la comparaison
 de durée n'a de sens qu'à l'intérieur d'une même campagne. Le lancement affiche aussi la part du modèle chargée sur le
 GPU (une part sur CPU ralentit beaucoup).
+
+## 2026-11-20 : variante « chantier » (branche theme/chantier, dossier A2A chantier)
+
+Variante du projet où les membres sont des entreprises sous-traitantes d'un chantier qui gardent privées leurs vraies
+disponibilités (autres chantiers). Détails et motivation : `docs/THEME_CHANTIER.md`. Changements par rapport à `main` :
+
+- `MemberProfile.declared_capacity_hours` : heures déclarées. Le validateur et l'agent utilisent les vraies heures ;
+  `INFO_REPLY` et le coordinateur central n'ont que les déclarations (`public_view`). Une absence est publique.
+- Nouvelle architecture sans LLM `oracle` : la baseline gloutonne avec toutes les informations. `baseline` devient le
+  coordinateur central qui ne voit que les déclarations.
+- Prompts réécrits pour le chantier (mêmes variables, mêmes décisions, confidentialité rappelée aux agents).
+- Nouvelle mesure `feasible_ratio` : part des tâches attribuées de façon réalisable avec les vraies contraintes.
+- Les aides de révision de l'orchestrateur utilisent les déclarations reçues (c'est tout ce qu'il sait) : leurs
+  propositions peuvent donc être irréalisables, ce que les objections des entreprises corrigent.
+- Splits régénérés avec `scenarios/chantier.py`, avant tout réglage de prompt : `dev` (graines 3000 à 3019), SHA-256
+  `f2060f0b5235de7378a823b1cdd2f259c77c0adfac58349f799e3e47bc8d5f2d` ; **`test` (graines 4000 à 4049), SHA-256
+  `0a8369c6a2996509cb6a8dc8f17b3d0607bc089d9bada209d324354c3ee89a78`**. Aucun scénario n'est choisi selon le résultat
+  de la baseline ou des agents. Seul `chantier_demo` (graine 5000) a été choisi parce que le coordinateur central
+  échoue et que l'oracle réussit ; il sert à la démonstration et n'entre pas dans les mesures.
+- Les scénarios du thème d'origine et `tendu_demo.py` ne sont pas dans cette branche (ils restent sur `main`).
+
+Les prompts chantier n'ont pas encore été essayés avec le vrai modèle : à faire sur `dev` avant la campagne test.

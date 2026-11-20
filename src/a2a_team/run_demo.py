@@ -86,7 +86,7 @@ def main() -> None:
     if a.no_events:
         scenario.events = []
     run_dir = ROOT / "runs" / f"{datetime.now():%Y%m%d_%H%M%S}_{a.arch}_{scenario.id}"
-    llm = None if a.arch == "baseline" else make_client(cfg, fake=a.fake_llm)
+    llm = None if a.arch in ("baseline", "oracle") else make_client(cfg, fake=a.fake_llm)
 
     def live(ev: dict) -> None:
         if ev.get("kind") == "a2a" and ev["type"] != "ACK":

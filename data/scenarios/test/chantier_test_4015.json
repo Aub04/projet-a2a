@@ -1,0 +1,428 @@
+{
+  "id": "chantier_test_4015",
+  "split": "test",
+  "seed": 4015,
+  "weeks": [
+    "S47",
+    "S48",
+    "S49"
+  ],
+  "members": [
+    {
+      "id": "e1",
+      "name": "Plomberie Moreau",
+      "skills": {
+        "plomberie": 4,
+        "electricite": 0,
+        "chauffage_ventilation": 3,
+        "platrerie": 0,
+        "menuiserie": 0,
+        "carrelage": 0,
+        "peinture": 0
+      },
+      "capacity_hours": {
+        "S47": 5.0,
+        "S48": 20.0,
+        "S49": 20.0
+      },
+      "declared_capacity_hours": {
+        "S47": 20.0,
+        "S48": 20.0,
+        "S49": 20.0
+      },
+      "max_tasks_per_week": null,
+      "preferences": [
+        "plomberie"
+      ],
+      "dislikes": [
+        "chauffage_ventilation"
+      ],
+      "hard_limits": [
+        "Équipe engagée sur un autre chantier en S47 : 5 h réellement disponibles sur 20 h déclarées (information confidentielle)"
+      ],
+      "meeting_slots": [
+        "S47-jeu-17",
+        "S47-lun-14",
+        "S47-lun-17",
+        "S47-mar-11",
+        "S47-mer-14",
+        "S47-mer-17",
+        "S47-ven-17",
+        "S48-jeu-17",
+        "S48-lun-11",
+        "S48-lun-14",
+        "S48-mar-14",
+        "S48-ven-11",
+        "S49-jeu-17",
+        "S49-lun-17",
+        "S49-mar-14",
+        "S49-ven-14",
+        "S49-ven-17",
+        "S49-ven-8"
+      ]
+    },
+    {
+      "id": "e2",
+      "name": "Électricité Garnier",
+      "skills": {
+        "plomberie": 3,
+        "electricite": 5,
+        "chauffage_ventilation": 0,
+        "platrerie": 0,
+        "menuiserie": 0,
+        "carrelage": 0,
+        "peinture": 0
+      },
+      "capacity_hours": {
+        "S47": 8.0,
+        "S48": 8.0,
+        "S49": 20.0
+      },
+      "declared_capacity_hours": {
+        "S47": 20.0,
+        "S48": 20.0,
+        "S49": 20.0
+      },
+      "max_tasks_per_week": null,
+      "preferences": [
+        "electricite"
+      ],
+      "dislikes": [],
+      "hard_limits": [
+        "Équipe engagée sur un autre chantier en S48 : 8 h réellement disponibles sur 20 h déclarées (information confidentielle)",
+        "Équipe engagée sur un autre chantier en S47 : 8 h réellement disponibles sur 20 h déclarées (information confidentielle)"
+      ],
+      "meeting_slots": [
+        "S47-lun-14",
+        "S47-lun-17",
+        "S47-mer-14",
+        "S48-jeu-14",
+        "S48-jeu-17",
+        "S48-lun-11",
+        "S48-lun-14",
+        "S48-mer-8",
+        "S48-ven-8",
+        "S49-jeu-17",
+        "S49-lun-17",
+        "S49-ven-11",
+        "S49-ven-14",
+        "S49-ven-17",
+        "S49-ven-8"
+      ]
+    },
+    {
+      "id": "e3",
+      "name": "Plâtrerie Perrin",
+      "skills": {
+        "plomberie": 0,
+        "electricite": 0,
+        "chauffage_ventilation": 0,
+        "platrerie": 5,
+        "menuiserie": 0,
+        "carrelage": 0,
+        "peinture": 2
+      },
+      "capacity_hours": {
+        "S47": 8.0,
+        "S48": 35.0,
+        "S49": 35.0
+      },
+      "declared_capacity_hours": {
+        "S47": 35.0,
+        "S48": 35.0,
+        "S49": 35.0
+      },
+      "max_tasks_per_week": null,
+      "preferences": [
+        "platrerie"
+      ],
+      "dislikes": [
+        "peinture"
+      ],
+      "hard_limits": [
+        "Équipe engagée sur un autre chantier en S47 : 8 h réellement disponibles sur 35 h déclarées (information confidentielle)"
+      ],
+      "meeting_slots": [
+        "S47-jeu-17",
+        "S47-lun-14",
+        "S47-lun-17",
+        "S47-mer-11",
+        "S47-mer-17",
+        "S48-jeu-17",
+        "S48-mar-14",
+        "S48-mer-8",
+        "S48-ven-11",
+        "S48-ven-8",
+        "S49-lun-17",
+        "S49-mar-14",
+        "S49-mer-17",
+        "S49-ven-11",
+        "S49-ven-14",
+        "S49-ven-17",
+        "S49-ven-8"
+      ]
+    },
+    {
+      "id": "e4",
+      "name": "Peinture Fontaine",
+      "skills": {
+        "plomberie": 0,
+        "electricite": 0,
+        "chauffage_ventilation": 0,
+        "platrerie": 0,
+        "menuiserie": 0,
+        "carrelage": 2,
+        "peinture": 5
+      },
+      "capacity_hours": {
+        "S47": 17.0,
+        "S48": 35.0,
+        "S49": 35.0
+      },
+      "declared_capacity_hours": {
+        "S47": 35.0,
+        "S48": 35.0,
+        "S49": 35.0
+      },
+      "max_tasks_per_week": null,
+      "preferences": [
+        "peinture"
+      ],
+      "dislikes": [
+        "carrelage"
+      ],
+      "hard_limits": [
+        "Équipe engagée sur un autre chantier en S47 : 17 h réellement disponibles sur 35 h déclarées (information confidentielle)"
+      ],
+      "meeting_slots": [
+        "S47-lun-14",
+        "S47-lun-17",
+        "S47-mar-11",
+        "S47-mer-11",
+        "S47-mer-14",
+        "S47-mer-17",
+        "S47-ven-17",
+        "S48-jeu-17",
+        "S48-lun-11",
+        "S48-lun-14",
+        "S48-mar-14",
+        "S48-mer-8",
+        "S48-ven-11",
+        "S49-jeu-17",
+        "S49-lun-17",
+        "S49-mar-14",
+        "S49-mer-17",
+        "S49-ven-11",
+        "S49-ven-14",
+        "S49-ven-17",
+        "S49-ven-8"
+      ]
+    },
+    {
+      "id": "e5",
+      "name": "Menuiserie Garnier",
+      "skills": {
+        "plomberie": 0,
+        "electricite": 2,
+        "chauffage_ventilation": 0,
+        "platrerie": 0,
+        "menuiserie": 4,
+        "carrelage": 0,
+        "peinture": 0
+      },
+      "capacity_hours": {
+        "S47": 25.0,
+        "S48": 10.0,
+        "S49": 25.0
+      },
+      "declared_capacity_hours": {
+        "S47": 25.0,
+        "S48": 25.0,
+        "S49": 25.0
+      },
+      "max_tasks_per_week": null,
+      "preferences": [
+        "menuiserie"
+      ],
+      "dislikes": [
+        "electricite"
+      ],
+      "hard_limits": [
+        "Équipe engagée sur un autre chantier en S48 : 10 h réellement disponibles sur 25 h déclarées (information confidentielle)"
+      ],
+      "meeting_slots": [
+        "S47-lun-17",
+        "S47-mer-11",
+        "S47-mer-14",
+        "S47-mer-17",
+        "S47-ven-17",
+        "S48-jeu-17",
+        "S48-lun-14",
+        "S48-mar-14",
+        "S48-mer-8",
+        "S48-ven-11",
+        "S48-ven-8",
+        "S49-jeu-17",
+        "S49-lun-17",
+        "S49-mar-14",
+        "S49-mer-17",
+        "S49-ven-14",
+        "S49-ven-17",
+        "S49-ven-8"
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "id": "T01",
+      "title": "Chauffage et ventilation, logement C1",
+      "skill": "chauffage_ventilation",
+      "min_level": 2,
+      "hours": 3.0,
+      "deadline": "S49",
+      "depends_on": []
+    },
+    {
+      "id": "T02",
+      "title": "Plâtrerie, logement A1",
+      "skill": "platrerie",
+      "min_level": 1,
+      "hours": 5.0,
+      "deadline": "S48",
+      "depends_on": []
+    },
+    {
+      "id": "T03",
+      "title": "Menuiserie, logement B1",
+      "skill": "menuiserie",
+      "min_level": 2,
+      "hours": 16.0,
+      "deadline": "S47",
+      "depends_on": []
+    },
+    {
+      "id": "T04",
+      "title": "Électricité, logement B1",
+      "skill": "electricite",
+      "min_level": 1,
+      "hours": 5.0,
+      "deadline": "S49",
+      "depends_on": []
+    },
+    {
+      "id": "T05",
+      "title": "Électricité, logement B1",
+      "skill": "electricite",
+      "min_level": 2,
+      "hours": 6.0,
+      "deadline": "S49",
+      "depends_on": []
+    },
+    {
+      "id": "T06",
+      "title": "Plâtrerie, logement C1",
+      "skill": "platrerie",
+      "min_level": 4,
+      "hours": 23.0,
+      "deadline": "S48",
+      "depends_on": [
+        "T01"
+      ]
+    },
+    {
+      "id": "T07",
+      "title": "Peinture, logement A1",
+      "skill": "peinture",
+      "min_level": 3,
+      "hours": 9.0,
+      "deadline": "S48",
+      "depends_on": [
+        "T02"
+      ]
+    },
+    {
+      "id": "T08",
+      "title": "Peinture, local vélos",
+      "skill": "peinture",
+      "min_level": 1,
+      "hours": 14.0,
+      "deadline": "S48",
+      "depends_on": []
+    },
+    {
+      "id": "T09",
+      "title": "Chauffage et ventilation, logement A1",
+      "skill": "chauffage_ventilation",
+      "min_level": 3,
+      "hours": 13.0,
+      "deadline": "S49",
+      "depends_on": []
+    },
+    {
+      "id": "T10",
+      "title": "Plâtrerie, logement B1",
+      "skill": "platrerie",
+      "min_level": 1,
+      "hours": 8.0,
+      "deadline": "S49",
+      "depends_on": []
+    },
+    {
+      "id": "T11",
+      "title": "Menuiserie, logement A1",
+      "skill": "menuiserie",
+      "min_level": 1,
+      "hours": 16.0,
+      "deadline": "S49",
+      "depends_on": [
+        "T02"
+      ]
+    },
+    {
+      "id": "T12",
+      "title": "Carrelage, local vélos",
+      "skill": "carrelage",
+      "min_level": 1,
+      "hours": 10.0,
+      "deadline": "S49",
+      "depends_on": []
+    },
+    {
+      "id": "T13",
+      "title": "Peinture, local vélos",
+      "skill": "peinture",
+      "min_level": 2,
+      "hours": 15.0,
+      "deadline": "S49",
+      "depends_on": [
+        "T12"
+      ]
+    },
+    {
+      "id": "T14",
+      "title": "Peinture, logement A1",
+      "skill": "peinture",
+      "min_level": 4,
+      "hours": 13.0,
+      "deadline": "S49",
+      "depends_on": [
+        "T11"
+      ]
+    }
+  ],
+  "meetings_needed": 1,
+  "events": [
+    {
+      "trigger_round": 3,
+      "type": "absence",
+      "member_id": "e5",
+      "weeks": [
+        "S48"
+      ],
+      "task": null,
+      "task_id": null,
+      "new_deadline": null
+    }
+  ],
+  "difficulty": "confortable"
+}

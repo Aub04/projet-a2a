@@ -1,3 +1,7 @@
+> **Dossier « A2A chantier » (branche `theme/chantier`)** : variante où les agents représentent des entreprises
+> sous-traitantes aux disponibilités privées. Voir `docs/THEME_CHANTIER.md`. Les règles ci-dessous s'appliquent
+> aussi ; le scénario de démo est `chantier_demo` au lieu de `notre_groupe`.
+
 # Instructions pour l'agent (à lire en entier avant toute action)
 
 ## Contexte

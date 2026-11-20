@@ -1,0 +1,72 @@
+{
+  "assignments": [
+    {
+      "task_id": "T01",
+      "member_id": "e4",
+      "week": "S47"
+    },
+    {
+      "task_id": "T02",
+      "member_id": "e5",
+      "week": "S47"
+    },
+    {
+      "task_id": "T03",
+      "member_id": "e5",
+      "week": "S47"
+    },
+    {
+      "task_id": "T04",
+      "member_id": "e5",
+      "week": "S48"
+    },
+    {
+      "task_id": "T05",
+      "member_id": "e4",
+      "week": "S48"
+    },
+    {
+      "task_id": "T06",
+      "member_id": "e3",
+      "week": "S48"
+    },
+    {
+      "task_id": "T07",
+      "member_id": "e5",
+      "week": "S49"
+    },
+    {
+      "task_id": "T08",
+      "member_id": "e3",
+      "week": "S49"
+    },
+    {
+      "task_id": "T09",
+      "member_id": "e4",
+      "week": "S49"
+    },
+    {
+      "task_id": "T10",
+      "member_id": "e6",
+      "week": "S49"
+    },
+    {
+      "task_id": "T11",
+      "member_id": "e2",
+      "week": "S49"
+    },
+    {
+      "task_id": "T12",
+      "member_id": "e1",
+      "week": "S49"
+    },
+    {
+      "task_id": "T13",
+      "member_id": "e1",
+      "week": "S49"
+    }
+  ],
+  "meetings": [],
+  "unassigned": [],
+  "escalations": []
+}

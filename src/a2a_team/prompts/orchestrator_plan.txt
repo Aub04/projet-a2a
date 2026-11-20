@@ -1,10 +1,10 @@
-Membres (résumés envoyés par leurs agents) :
+Entreprises (déclarations envoyées par leurs agents) :
 {members}
 
-Tâches à répartir :
+Interventions à planifier :
 {tasks}
 
-Nombre de réunions d'une heure à placer avec tout le groupe : {meetings_needed}.
+Nombre de réunions de chantier d'une heure à placer avec toutes les entreprises : {meetings_needed}.
 {context}
 Produis le planning complet.
 Format : {{"assignments": [{{"task_id": "...", "member_id": "...", "week": "..."}}], "meetings": ["S47-mar-14", ...],

@@ -11,7 +11,6 @@ from a2a_team.eval.metrics import jaccard, stability
 from a2a_team.llm import FakeLLM
 from a2a_team.models import Assignment, Plan
 from a2a_team.scenarios.generator import load_split
-from a2a_team.scenarios.tendu_demo import build, complete
 
 
 def test_plan_runs_repetition_par_repetition_et_baseline_une_fois():
@@ -42,11 +41,11 @@ def test_erreur_infra_detectee():
 
 
 def test_campagne_fake_reprise_et_resume(tmp_path):
-    args = ["--split", "dev", "--scenarios", "dev_1000", "dev_1013", "--runs", "2", "--fake-llm",
+    args = ["--split", "dev", "--scenarios", "chantier_dev_3000", "chantier_dev_3002", "--runs", "2", "--fake-llm",
             "--transport", "memory", "--results-dir", str(tmp_path), "--campagne", "c"]
     assert camp_run.main(args) == 0
     rows = [json.loads(x) for x in (tmp_path / "c" / "runs.jsonl").read_text(encoding="utf-8").splitlines()]
-    assert len(rows) == 2 + 2 * 2 * 2
+    assert len(rows) == 2 * 2 + 2 * 2 * 2       # baseline et oracle une fois, p2p et orchestrateur 2 fois
     assert len({r["key"] for r in rows}) == len(rows)
     assert (tmp_path / "c" / "summary.csv").exists() and (tmp_path / "c" / "resume.md").exists()
     assert (tmp_path / "c" / "figures" / "complete.png").exists()
@@ -90,8 +89,30 @@ def test_aides_orchestrateur_charge_et_options(small_scenario):
         assert s.weeks.index(wk) <= s.weeks.index(t.deadline)
 
 
-def test_scenario_demo_tendu_baseline_echoue_mais_solution_existe():
-    sc, ref, f = build()
-    assert sc.difficulty == "tendu" and f < 1
-    assert complete(sc, ref)
-    assert not complete(sc, solve(sc, False))
+def test_chantier_infos_privees():
+    """Le coordinateur central ne voit que les déclarations ; les agents ne transmettent que les déclarations."""
+    from a2a_team.models import public_view
+    s = next(x for x in load_split("dev") if any(m.capacity_hours != m.declared_capacity_hours for m in x.members))
+    pub = public_view(s)
+    for m, p in zip(s.members, pub.members):
+        assert p.capacity_hours == m.declared_capacity_hours and p.hard_limits == []
+        assert all(m.capacity_hours[w] <= m.declared_capacity_hours[w] for w in s.weeks)
+
+
+async def test_info_reply_ne_revele_que_les_declarations():
+    s = load_split("dev")[0]
+    m = next(x for x in s.members if x.hard_limits)
+    a = MemberAgent(m, s.weeks, FakeLLM(), Tracer())
+    r = await a.handle({"type": "INFO_REQUEST", "sender": "orchestrateur", "content": {}})
+    assert r["content"]["capacity_hours"] == m.declared_capacity_hours
+    assert r["content"]["hard_limits"] == []
+
+
+def test_agents_respectent_les_vraies_heures_et_pas_le_central(tmp_path):
+    from a2a_team.architectures.runner import run
+    s = load_split("dev")[0]
+    central = run("baseline", s, None, tmp_path / "b", transport="memory")
+    oracle = run("oracle", s, None, tmp_path / "o", transport="memory")
+    p2p = run("p2p", s, FakeLLM(), tmp_path / "p", transport="memory")
+    assert not central.report.valid and oracle.report.valid
+    assert p2p.report.valid      # chaque agent connaît ses vraies heures : aucune violation

@@ -1,7 +1,8 @@
-Tu as annoncé la tâche {task_id} (« {title} », {skill} niveau {min_level}, {hours} h, échéance {deadline}) et tu
-dois maintenant l'attribuer. Propositions reçues (tu ne connais des autres membres que ce qu'ils ont écrit) :
+Tu as lancé l'appel d'offres pour l'intervention {task_id} (« {title} », {skill} qualification {min_level},
+{hours} h, échéance {deadline}) et tu dois maintenant l'attribuer. Offres reçues (tu ne connais des autres
+entreprises que ce qu'elles ont écrit) :
 {proposals}
 
-Choisis à qui attribuer la tâche. Pense à l'équilibre de la charge dans le groupe, aux préférences exprimées dans
-les justifications, et aux semaines les plus tôt quand d'autres tâches en dépendent.
-Format : {{"winner": identifiant du membre choisi, "reason": "..."}}
+Choisis l'entreprise retenue. Pense à la répartition de la charge entre entreprises, aux préférences exprimées dans
+les offres, et aux semaines les plus tôt quand d'autres corps de métier attendent cette intervention.
+Format : {{"winner": identifiant de l'entreprise choisie, "reason": "..."}}

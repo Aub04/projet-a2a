@@ -28,7 +28,7 @@ import time
 from datetime import datetime
 from pathlib import Path
 
-from a2a_team.architectures.runner import ARCHS, run
+from a2a_team.architectures.runner import ARCHS, NO_LLM, run
 from a2a_team.eval.metrics import run_key, run_row
 from a2a_team.eval.summary import write_summary
 from a2a_team.llm import load_config, make_client
@@ -38,7 +38,7 @@ from a2a_team.scenarios.generator import load_split, split_hash
 ROOT = Path(__file__).resolve().parents[3]
 RESULTS = ROOT / "results"
 # Empreinte du split test figé le 17/11/2026 (docs/DECISIONS.md). La campagne refuse de tourner s'il a changé.
-TEST_SPLIT_SHA256 = "666c84da46a73aeeac5cf0f6233dd28c8c3f250f8be90e38188193a87c086f98"
+TEST_SPLIT_SHA256 = "0a8369c6a2996509cb6a8dc8f17b3d0607bc089d9bada209d324354c3ee89a78"
 INFRA_MARKERS = ("ConnectError", "ConnectionError", "Connection refused", "Failed to connect", "10061", "10048",
                  "10013", "address already in use", "RemoteProtocolError", "ReadTimeout", "model not found",
                  "not found, try pulling")
@@ -147,11 +147,11 @@ def plan_runs(scenarios: list[Scenario], archs: list[str], runs: int) -> list[tu
     out = []
     for k in range(runs):
         for i, s in enumerate(interleave(scenarios)):
-            llm_archs = [a for a in archs if a != "baseline"]
+            llm_archs = [a for a in archs if a not in NO_LLM]
             if i % 2:   # alterne l'ordre p2p / orchestrateur d'un scénario à l'autre
                 llm_archs.reverse()
-            if "baseline" in archs and k == 0:
-                out.append((s, "baseline", 0))
+            if k == 0:   # baselines déterministes : une seule exécution
+                out += [(s, a, 0) for a in archs if a in NO_LLM]
             out += [(s, a, k) for a in llm_archs]
     return out
 
@@ -209,7 +209,7 @@ def main(argv: list[str] | None = None) -> int:
             say(f"ERREUR : le split test a changé (hash {h[:12]}..., attendu {TEST_SPLIT_SHA256[:12]}...). "
                 f"Campagne refusée.")
             return 2
-    llm_needed = any(x != "baseline" for x in a.archs)
+    llm_needed = any(x not in NO_LLM for x in a.archs)
     status = None
     if llm_needed and not a.fake_llm and cfg["llm"]["provider"] == "ollama":
         status = ollama_status(cfg)
@@ -268,16 +268,16 @@ def main(argv: list[str] | None = None) -> int:
             for attempt in range(2):
                 if run_dir.exists():   # reste d'une exécution interrompue : on repart de zéro
                     shutil.rmtree(run_dir)
-                res = run(arch, s, llm if arch != "baseline" else None, run_dir, max_rounds, a.transport,
+                res = run(arch, s, llm if arch not in NO_LLM else None, run_dir, max_rounds, a.transport,
                           repeat=k, orchestrator_hints=hints)
-                if arch == "baseline" or a.fake_llm or not is_infra_error(res.error):
+                if arch in NO_LLM or a.fake_llm or not is_infra_error(res.error):
                     break
                 say(f"  panne d'infrastructure : {res.error[:160]}")
                 if attempt == 0:
                     say("  attente d'Ollama (10 min maximum) puis nouvel essai...")
                     time.sleep(5)
                     wait_for_ollama(cfg)
-            if arch != "baseline" and not a.fake_llm and is_infra_error(res.error):
+            if arch not in NO_LLM and not a.fake_llm and is_infra_error(res.error):
                 shutil.rmtree(run_dir, ignore_errors=True)
                 stopped = f"panne d'infrastructure persistante ({res.error[:120]})"
                 break

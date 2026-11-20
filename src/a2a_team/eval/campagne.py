@@ -5,9 +5,9 @@
 Étapes :
 1. vérifications : Ollama répond, le modèle est installé, split test intact ; mesure du temps d'un appel LLM et
    estimation de la durée totale ;
-2. scénarios de démo (notre_groupe et notre_groupe_tendu), une exécution par architecture, dans
-   results/campagne_demo/, puis export de la notation à l'aveugle ;
-3. campagne finale sur le split test (50 scénarios, p2p + orchestrateur + baseline, N répétitions) dans
+2. scénario de démo chantier_demo, une exécution par architecture, dans results/campagne_demo/ ;
+3. campagne finale sur le split test (50 scénarios chantier, p2p + orchestrateur + coordinateur central + oracle,
+   N répétitions) dans
    results/campagne_test/ ;
 4. archive results/resultats_<date>.zip à renvoyer au groupe.
 Relancer la même commande reprend là où la campagne s'est arrêtée.
@@ -131,17 +131,9 @@ def main() -> int:
 
     status = 0
     if not a.sans_demo:
-        say("=== 2. Scénarios de démo (notre_groupe, notre_groupe_tendu) ===")
+        say("=== 2. Scénario de démo (chantier_demo) ===")
         status = camp_run.main(["--split", "demo", "--runs", "1", "--campagne", "campagne_demo"] + extra)
-        if status == 0:
-            from a2a_team.eval.notation import export
-            for sid in ("notre_groupe", "notre_groupe_tendu"):
-                try:
-                    say(f"Notation à l'aveugle : "
-                        f"{export(root / 'campagne_demo', sid, root / 'notation_aveugle' if a.essai else None)}")
-                except SystemExit as e:
-                    say(f"Notation à l'aveugle non exportée : {e}")
-        elif status != 1:
+        if status not in (0, 1):
             return status
 
     if status == 0:
@@ -152,7 +144,7 @@ def main() -> int:
         status = camp_run.main(args)
 
     say("=== 4. Archive des résultats ===")
-    z = zip_results([root / "campagne_demo", root / "campagne_test", root / "notation_aveugle"], root)
+    z = zip_results([root / "campagne_demo", root / "campagne_test"], root)
     say(f"Archive : {z} ({z.stat().st_size / 1e6:.1f} Mo). Envoyez ce fichier au groupe.")
     say(f"Résumé lisible : {root / 'campagne_test' / 'resume.md'}")
     if status:

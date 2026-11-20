@@ -243,10 +243,11 @@ class MemberAgent:
     # --- Architecture orchestrateur
     async def on_info_request(self, sender: str, c: dict) -> dict:
         p = self.profile
+        private = p.declared_capacity_hours is not None   # thème chantier : seules les déclarations sortent
         return self.reply("INFO_REPLY", {
-            "member_id": p.id, "name": p.name, "skills": p.skills, "capacity_hours": p.capacity_hours,
+            "member_id": p.id, "name": p.name, "skills": p.skills, "capacity_hours": p.public_capacity(),
             "max_tasks_per_week": p.max_tasks_per_week, "preferences": p.preferences, "dislikes": p.dislikes,
-            "hard_limits": p.hard_limits, "meeting_slots": p.meeting_slots})
+            "hard_limits": [] if private else p.hard_limits, "meeting_slots": p.meeting_slots})
 
     async def on_plan_proposal(self, sender: str, c: dict) -> dict:
         items = [(Task.model_validate(a["task"]), a["week"]) for a in c["assignments"]]

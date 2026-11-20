@@ -1,3 +1,20 @@
+# Projet métier IR5, variante « chantier » (A2A)
+
+> Ce dossier est la variante **chantier** du projet (branche `theme/chantier`). Le projet du groupe sur notre propre
+> répartition de tâches est dans le dossier voisin `A2A notre groupe` (branche `main`). Le moteur est le même ; ici,
+> les agents représentent des entreprises sous-traitantes qui ne partagent pas leurs vraies disponibilités.
+> Explication complète : `docs/THEME_CHANTIER.md`.
+
+Architectures comparées : **p2p** (Contract Net entre entreprises), **orchestrator** (un coordinateur LLM propose,
+les entreprises acceptent ou objectent), **baseline** (coordinateur central glouton qui ne voit que les heures
+déclarées), **oracle** (même glouton avec toutes les informations privées, référence irréaliste).
+
+Scénarios : `uv run python -m a2a_team.scenarios.chantier` (dev 20, test 50 figé, demo `chantier_demo`).
+Campagne : identique au projet du groupe (`campagne.cmd` / `campagne.sh`), avec le scénario de démo
+`chantier_demo` et les quatre architectures.
+
+---
+
 # Projet métier IR5 : pair-à-pair ou orchestrateur ? (A2A)
 
 Deux organisations d'un même système multi-agents basé sur le protocole A2A, comparées sur la répartition des tâches

@@ -16,7 +16,9 @@ class MemberProfile(BaseModel):
     id: str
     name: str
     skills: dict[str, int]
-    capacity_hours: dict[str, float]
+    capacity_hours: dict[str, float]           # heures réellement disponibles (privées dans le thème chantier)
+    # Heures déclarées aux autres entreprises et au coordinateur. None : les vraies heures sont publiques.
+    declared_capacity_hours: dict[str, float] | None = None
     max_tasks_per_week: int | None = None
     preferences: list[str] = Field(default_factory=list)
     dislikes: list[str] = Field(default_factory=list)
@@ -25,6 +27,11 @@ class MemberProfile(BaseModel):
 
     def level(self, skill: str) -> int:
         return int(self.skills.get(skill, 0))
+
+    def public_capacity(self) -> dict[str, float]:
+        """Ce que les autres savent des heures de ce membre : sa déclaration, ou ses vraies heures."""
+        return dict(self.declared_capacity_hours if self.declared_capacity_hours is not None
+                    else self.capacity_hours)
 
 
 class Task(BaseModel):
@@ -116,6 +123,8 @@ def apply_event(scenario: Scenario, event: Event) -> Scenario:
         m = s.member(event.member_id)
         for w in event.weeks:
             m.capacity_hours[w] = 0.0
+            if m.declared_capacity_hours is not None:   # une absence est connue de tous
+                m.declared_capacity_hours[w] = 0.0
     elif event.type == "new_task":
         if event.task and all(t.id != event.task.id for t in s.tasks):
             s.tasks.append(event.task.model_copy(deep=True))
@@ -129,6 +138,16 @@ def apply_events(scenario: Scenario, events: list[Event] | None = None) -> Scena
     s = scenario
     for e in sorted(events, key=lambda e: e.trigger_round):
         s = apply_event(s, e)
+    return s
+
+
+def public_view(scenario: Scenario) -> Scenario:
+    """Le scénario tel que le voit un planificateur central : heures déclarées, limites privées absentes."""
+    s = scenario.model_copy(deep=True)
+    for m in s.members:
+        if m.declared_capacity_hours is not None:
+            m.capacity_hours = dict(m.declared_capacity_hours)
+            m.hard_limits = []
     return s
 
 

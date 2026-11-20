@@ -1,8 +1,8 @@
-Message reçu de {sender} : sondage pour la réunion de groupe n°{index} (une heure, tout le monde).
+Message reçu de {sender} : sondage pour la réunion de chantier n°{index} (une heure, toutes les entreprises).
 Créneaux proposés : {slots}.
 Créneaux compatibles avec l'agenda de {name} (vérifié par le programme) : {options}.
 
 Tous les créneaux compatibles sont acceptés par défaut. Ne refuse un créneau que si une limite ou une préférence
 écrite dans le profil de {name} l'exclut clairement, et cite cette phrase du profil dans la raison. N'invente pas de
-préférence qui n'est pas dans le profil. Une réunion sans date commune bloque tout le groupe.
+préférence qui n'est pas dans le profil. Une réunion sans date commune bloque tout le chantier.
 Format : {{"refused": [liste de créneaux refusés, souvent vide], "reason": "..."}}
