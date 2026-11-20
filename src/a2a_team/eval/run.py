@@ -75,15 +75,15 @@ def _cmd(args: list[str]) -> str | None:
 
 
 def ollama_host(cfg: dict) -> str:
-    return (cfg["llm"].get("host") or os.environ.get("OLLAMA_HOST") or "http://localhost:11434").rstrip("/")
+    host = (cfg["llm"].get("host") or os.environ.get("OLLAMA_HOST") or "http://localhost:11434").rstrip("/")
+    host = host.replace("0.0.0.0", "localhost")
+    return host if host.startswith("http") else "http://" + host
 
 
 def ollama_status(cfg: dict) -> dict | None:
     """Version d'Ollama et modèle installé, ou None si le serveur ne répond pas."""
     import httpx
     host = ollama_host(cfg)
-    if not host.startswith("http"):
-        host = "http://" + host
     try:
         tags = httpx.get(f"{host}/api/tags", timeout=10).json()
         version = httpx.get(f"{host}/api/version", timeout=10).json().get("version")
@@ -108,7 +108,8 @@ def wait_for_ollama(cfg: dict, minutes: float = 10) -> bool:
 def machine_info() -> dict:
     gpu = _cmd(["nvidia-smi", "--query-gpu=name,memory.total,driver_version", "--format=csv,noheader"])
     return {"platform": platform.platform(), "processor": platform.processor(), "cpu_count": os.cpu_count(),
-            "python": sys.version.split()[0], "gpu": gpu}
+            "python": sys.version.split()[0], "gpu": gpu,
+            "ollama_env": {k: os.environ.get(k) for k in ("OLLAMA_NUM_PARALLEL", "OLLAMA_FLASH_ATTENTION")}}
 
 
 def is_infra_error(error: str | None) -> bool:

@@ -59,6 +59,20 @@ def calibrate(cfg: dict) -> float | None:
         return None
 
 
+def gpu_offload(cfg: dict) -> float | None:
+    """Part du modèle chargé en mémoire vidéo, d'après /api/ps d'Ollama (None si inconnu)."""
+    import httpx
+    from a2a_team.eval.run import ollama_host
+    try:
+        models = httpx.get(f"{ollama_host(cfg)}/api/ps", timeout=10).json().get("models", [])
+    except Exception:
+        return None
+    m = next((m for m in models if m.get("name", "").startswith(cfg["llm"]["model"])), None)
+    if not m or not m.get("size"):
+        return None
+    return m.get("size_vram", 0) / m["size"]
+
+
 def zip_results(paths: list[Path], root: Path = RESULTS) -> Path:
     out = root / f"resultats_{datetime.now():%Y%m%d_%H%M}.zip"
     with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
@@ -101,6 +115,12 @@ def main() -> int:
     gpu = camp_run.machine_info()["gpu"]
     say(f"GPU : {gpu or 'non détecté (nvidia-smi absent) : le calcul risque d être très lent'}")
     t_call = None if a.essai else calibrate(cfg)
+    if not a.essai:
+        gpu_share = gpu_offload(cfg)
+        if gpu_share is not None:
+            say(f"Part du modèle chargée sur le GPU : {gpu_share:.0%}"
+                + ("" if gpu_share >= 0.99 else " : une partie tourne sur le CPU, c'est beaucoup plus lent "
+                                                  "(mémoire vidéo insuffisante ou autre programme sur le GPU)."))
     if t_call:
         k = t_call / REF_CALL_S * TEST_AVG_TASKS / REF_TASKS
         per_rep = 50 * (REF_P2P_S + REF_ORCH_S) * k

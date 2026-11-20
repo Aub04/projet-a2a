@@ -44,8 +44,24 @@ function Test-Ollama {
     try { Invoke-RestMethod -Uri "http://localhost:11434/api/version" -TimeoutSec 3 | Out-Null; return $true }
     catch { return $false }
 }
-if (-not (Test-Ollama)) {
-    Info "Demarrage du serveur Ollama..."
+
+# Reglages GPU : requetes en parallele selon la memoire video (le p2p interroge plusieurs agents a la fois),
+# flash attention (calcul exact, moins de memoire). Ne s'appliquent que si ce script demarre lui-meme Ollama.
+$vram = 0
+if (Get-Command nvidia-smi -ErrorAction SilentlyContinue) {
+    $q = nvidia-smi --query-gpu=name,memory.total --format=csv,noheader,nounits | Select-Object -First 1
+    if ($q) { $vram = [int](($q -split ",")[1].Trim()); Info "GPU detecte : $q Mo" }
+} else {
+    Info "ATTENTION : aucune carte NVIDIA detectee (nvidia-smi absent). Le calcul se fera sur CPU, tres lentement."
+}
+$parallel = if ($vram -ge 16000) { 4 } elseif ($vram -ge 11000) { 2 } else { 1 }
+$env:OLLAMA_NUM_PARALLEL = "$parallel"
+$env:OLLAMA_FLASH_ATTENTION = "1"
+if (Test-Ollama) {
+    Info "Ollama tourne deja : les reglages GPU de ce script ($parallel requetes en parallele) ne s'appliquent pas."
+    Info "Pour aller plus vite : quitter Ollama (icone pres de l'horloge, Quit Ollama) puis relancer campagne.cmd."
+} else {
+    Info "Demarrage du serveur Ollama ($parallel requete(s) en parallele, flash attention)..."
     Start-Process -FilePath "ollama" -ArgumentList "serve" -WindowStyle Hidden
     for ($i = 0; $i -lt 30 -and -not (Test-Ollama); $i++) { Start-Sleep -Seconds 2 }
 }

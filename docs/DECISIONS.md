@@ -209,3 +209,11 @@ Essai réel partiel de la version finale (orchestrateur sur `dev_1013`, interrom
 4 plannings sont au bon format, les aides apparaissent dans le prompt. Les objections baissent à la 2e et 3e révision
 (2 membres acceptent), puis le modèle remet un créneau de réunion déjà refusé et laisse T10 sur un membre sans place.
 Pas de conclusion possible sur une exécution partielle : la campagne mesurera.
+
+Réglages GPU du lancement (`campagne.cmd`, `campagne.sh`), sans effet sur les réponses du modèle : Ollama est démarré
+avec `OLLAMA_FLASH_ATTENTION=1` et `OLLAMA_NUM_PARALLEL` choisi selon la mémoire vidéo (1 sous 11 Go, 2 sous 16 Go,
+4 au-delà). Le p2p et l'orchestrateur envoient déjà plusieurs demandes en même temps (appel d'offres à tous les
+agents, consultation de tous les membres) : avec plusieurs requêtes traitées en parallèle, les deux architectures vont
+plus vite. Les durées mesurées dépendent donc de la machine et de ce réglage, noté dans `meta.json` ; la comparaison
+de durée n'a de sens qu'à l'intérieur d'une même campagne. Le lancement affiche aussi la part du modèle chargée sur le
+GPU (une part sur CPU ralentit beaucoup).

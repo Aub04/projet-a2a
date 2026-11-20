@@ -24,8 +24,20 @@ if ! command -v ollama >/dev/null; then
 fi
 
 ollama_ok() { curl -fs http://localhost:11434/api/version >/dev/null 2>&1; }
-if ! ollama_ok; then
-  info "Démarrage du serveur Ollama..."
+# Réglages GPU : requêtes en parallèle selon la mémoire vidéo, flash attention (s'appliquent si ce script démarre Ollama)
+VRAM=0
+if command -v nvidia-smi >/dev/null; then
+  VRAM=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits | head -1 | tr -d ' ')
+  info "GPU détecté : $(nvidia-smi --query-gpu=name --format=csv,noheader | head -1), ${VRAM} Mo"
+else
+  info "ATTENTION : aucune carte NVIDIA détectée, le calcul se fera sur CPU (très lent) ou sur Metal (Mac)."
+fi
+if [ "$VRAM" -ge 16000 ]; then PAR=4; elif [ "$VRAM" -ge 11000 ]; then PAR=2; else PAR=1; fi
+export OLLAMA_NUM_PARALLEL=$PAR OLLAMA_FLASH_ATTENTION=1
+if ollama_ok; then
+  info "Ollama tourne déjà : pour appliquer $PAR requêtes en parallèle, l'arrêter puis relancer ce script."
+else
+  info "Démarrage du serveur Ollama ($PAR requête(s) en parallèle, flash attention)..."
   nohup ollama serve >/tmp/ollama_campagne.log 2>&1 &
   for _ in $(seq 30); do ollama_ok && break; sleep 2; done
 fi
